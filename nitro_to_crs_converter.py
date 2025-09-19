@@ -126,19 +126,19 @@ class NitroToCRSConverter:
             
             # Get corner coordinates
             x1, y1 = crop_rect[0]  # lower-left
-            x2, y2 = crop_rect[1]  # upper-right
+            w, h = crop_rect[1]
 
             # Special case: if all crop values are zero, this is a rotation-only edit
-            if x1 == 0 and y1 == 0 and x2 == 0 and y2 == 0:
-                x2 = original_width
-                y2 = original_height
+            if x1 == 0 and y1 == 0 and w == 0 and h == 0:
+                w = original_width
+                h = original_height
             
             # Convert to normalized coordinates (0-1)
             # Note: Nitro uses bottom-left origin, Adobe uses top-left
             # So we need to flip the Y coordinates
             crop_left = x1 / original_width
-            crop_right = x2 / original_width
-            crop_top = (original_height - y2) / original_height
+            crop_right = (x1 + w) / original_width
+            crop_top = (original_height - (y1 + h)) / original_height
             crop_bottom = (original_height - y1) / original_height
             
             # Get rotation/straighten angle
@@ -294,7 +294,7 @@ class NitroToCRSConverter:
         output_path.mkdir(parents=True, exist_ok=True)
         
         # Find all XMP files
-        xmp_files = list(input_path.glob("*.xmp"))
+        xmp_files = sorted(input_path.glob("*.xmp"))
         
         if not xmp_files:
             print(f"No XMP files found in {input_dir}")
