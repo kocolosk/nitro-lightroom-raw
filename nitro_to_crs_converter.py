@@ -127,14 +127,19 @@ class NitroToCRSConverter:
             # Get corner coordinates
             x1, y1 = crop_rect[0]  # lower-left
             x2, y2 = crop_rect[1]  # upper-right
+
+            # Special case: if all crop values are zero, this is a rotation-only edit
+            if x1 == 0 and y1 == 0 and x2 == 0 and y2 == 0:
+                x2 = original_width
+                y2 = original_height
             
             # Convert to normalized coordinates (0-1)
             # Note: Nitro uses bottom-left origin, Adobe uses top-left
             # So we need to flip the Y coordinates
             crop_left = x1 / original_width
             crop_right = x2 / original_width
-            crop_bottom = (original_height - y2) / original_height  # Flip Y
-            crop_top = (original_height - y1) / original_height     # Flip Y
+            crop_top = (original_height - y2) / original_height
+            crop_bottom = (original_height - y1) / original_height
             
             # Get rotation/straighten angle
             straighten = crop_json.get('numeric', {}).get('straighten', 0)
@@ -142,9 +147,9 @@ class NitroToCRSConverter:
             # Build CRS properties
             crs_crop = {
                 'crs:CropLeft': crop_left,
-                'crs:CropTop': crop_bottom,
+                'crs:CropTop': crop_top,
                 'crs:CropRight': crop_right,
-                'crs:CropBottom': crop_top,
+                'crs:CropBottom': crop_bottom,
                 'crs:CropAngle': straighten,
                 'crs:HasCrop': True
             }
