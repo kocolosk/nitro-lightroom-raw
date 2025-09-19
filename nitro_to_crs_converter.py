@@ -127,38 +127,51 @@ class NitroToCRSConverter:
             x1, y1 = crop_rect[0]  # lower-left
             w, h = crop_rect[1]
 
-            # Special case: if all crop values are zero, this is a rotation-only edit
-            if x1 == 0 and y1 == 0 and w == 0 and h == 0:
-                w = original_width
-                h = original_height
-            
-            # Convert to normalized coordinates (0-1)
-            # Note: Nitro uses bottom-left origin, Adobe uses top-left
-            # So we need to flip the Y coordinates
-            crop_left = x1 / original_width
-            crop_right = (x1 + w) / original_width
-            crop_top = (original_height - (y1 + h)) / original_height
-            crop_bottom = (original_height - y1) / original_height
-            
             # Get rotation/straighten angle
             straighten = crop_json.get('numeric', {}).get('straighten', 0)
-            
-            # Build CRS properties
-            crs_crop = {
-                'crs:CropLeft': crop_left,
-                'crs:CropTop': crop_top,
-                'crs:CropRight': crop_right,
-                'crs:CropBottom': crop_bottom,
-                'crs:CropAngle': straighten,
-                'crs:HasCrop': True
-            }
-            
-            # Add aspect ratio constraint if available
-            if crop_json.get('aspectRatioType') == 3:  # Custom aspect ratio
-                aspect_width = crop_json.get('aspectWidth')
-                aspect_height = crop_json.get('aspectHeight')
-                if aspect_width and aspect_height:
-                    crs_crop['crs:CropConstrainToWarp'] = False
+
+            # Special case: if all crop values are zero, this is a rotation-only edit
+            if x1 == 0 and y1 == 0 and w == 0 and h == 0:
+                crs_crop = {
+                    'crs:CropAngle': straighten,
+                    'crs:HasCrop': False,  # Key: no manual crop
+                    'crs:CropConstrainToWarp': False,
+                    # 'crs:CropLeft': 0,
+                    # 'crs:CropTop': 0,
+                    # 'crs:CropRight': 1,
+                    # 'crs:CropBottom': 1,
+                    # 'crs:AutoLateralCA': 0,  # Prevent auto lateral CA correction
+                    # 'crs:LensProfileEnable': 0,  # Disable lens corrections that might affect crop
+                    # 'crs:PerspectiveRotate': 0,  # No perspective rotation
+                    # 'crs:PerspectiveAspect': 0,  # Maintain original aspect
+                    # 'crs:PerspectiveScale': 100,  # No perspective scaling
+                }
+            else:            
+                # Convert to normalized coordinates (0-1)
+                # Note: Nitro uses bottom-left origin, Adobe uses top-left
+                # So we need to flip the Y coordinates
+                crop_left = x1 / original_width
+                crop_right = (x1 + w) / original_width
+                crop_top = (original_height - (y1 + h)) / original_height
+                crop_bottom = (original_height - y1) / original_height
+                
+                
+                # Build CRS properties
+                crs_crop = {
+                    'crs:CropLeft': crop_left,
+                    'crs:CropTop': crop_top,
+                    'crs:CropRight': crop_right,
+                    'crs:CropBottom': crop_bottom,
+                    'crs:CropAngle': straighten,
+                    'crs:HasCrop': True
+                }
+                
+                # Add aspect ratio constraint if available
+                if crop_json.get('aspectRatioType') == 3:  # Custom aspect ratio
+                    aspect_width = crop_json.get('aspectWidth')
+                    aspect_height = crop_json.get('aspectHeight')
+                    if aspect_width and aspect_height:
+                        crs_crop['crs:CropConstrainToWarp'] = False
             
             return crs_crop
             
