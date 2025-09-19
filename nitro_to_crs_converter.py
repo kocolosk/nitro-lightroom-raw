@@ -297,6 +297,78 @@ class NitroToCRSConverter:
             print(f"Error converting {nitro_path}: {e}")
             return False
 
+    def pretty_print_editmodel(self, nitro_path):
+        """
+        Pretty-print the contents of the nitro:EditModel plist from an XMP file.
+        
+        Args:
+            nitro_path (str): Path to Nitro XMP file
+        """
+        try:
+            plist_data = self.extract_plist_from_xmp(nitro_path)
+            if not plist_data:
+                print(f"No Nitro edit model found in {nitro_path}")
+                return
+            
+            print(f"\n=== Nitro EditModel Contents: {Path(nitro_path).name} ===")
+            
+            # Print top-level plist keys
+            print("\nTop-level plist keys:")
+            for key, value in plist_data.items():
+                if key == 'editModel':
+                    print(f"  {key}: <parsed JSON object>")
+                else:
+                    print(f"  {key}: {value}")
+            
+            # Print editModel JSON structure if present
+            if 'editModel' in plist_data and isinstance(plist_data['editModel'], dict):
+                edit_model = plist_data['editModel']
+                print(f"\nEditModel JSON structure:")
+                print(f"  formatVersion: {edit_model.get('formatVersion')}")
+                print(f"  defaultOrientation: {edit_model.get('defaultOrientation')}")
+                print(f"  currentVersionIndex: {edit_model.get('currentVersionIndex')}")
+                print(f"  editingJPEGHalf: {edit_model.get('editingJPEGHalf')}")
+                print(f"  lowResMask: {edit_model.get('lowResMask')}")
+                
+                versions = edit_model.get('versions', [])
+                print(f"  versions: {len(versions)} version(s)")
+                
+                for i, version in enumerate(versions):
+                    print(f"\n  Version {i}:")
+                    adj_data_arr = version.get('adjDataArr', [])
+                    masks = version.get('masks', [])
+                    print(f"    adjDataArr: {len(adj_data_arr)} adjustment(s)")
+                    print(f"    masks: {len(masks)} mask(s)")
+                    
+                    for j, adj in enumerate(adj_data_arr):
+                        adj_id = adj.get('id', 'Unknown')
+                        print(f"      Adjustment {j}: {adj_id}")
+                        
+                        if adj_id == 'Crop' and 'json' in adj:
+                            try:
+                                crop_data = json.loads(adj['json'])
+                                print(f"        Crop details:")
+                                print(f"          enabled: {crop_data.get('enabled')}")
+                                print(f"          disclosed: {crop_data.get('disclosed')}")
+                                print(f"          cropRect: {crop_data.get('cropRect')}")
+                                print(f"          aspectRatioType: {crop_data.get('aspectRatioType')}")
+                                print(f"          aspectWidth: {crop_data.get('aspectWidth')}")
+                                print(f"          aspectHeight: {crop_data.get('aspectHeight')}")
+                                print(f"          orientationIsRelative: {crop_data.get('orientationIsRelative')}")
+                                
+                                numeric = crop_data.get('numeric', {})
+                                if numeric:
+                                    print(f"          numeric:")
+                                    for key, val in numeric.items():
+                                        print(f"            {key}: {val}")
+                            except json.JSONDecodeError as e:
+                                print(f"        Error parsing crop JSON: {e}")
+            
+            print("\n" + "="*60)
+            
+        except Exception as e:
+            print(f"Error reading {nitro_path}: {e}")
+
     def convert_directory(self, nitro_dir, adobe_dir):
         """
         Convert all XMP files from Nitro directory and update corresponding files in Adobe directory.
@@ -336,18 +408,44 @@ class NitroToCRSConverter:
 
 
 def main():
-    if len(sys.argv) < 3:
+    if len(sys.argv) < 2:
         print("Usage:")
-        print("  python nitro_to_crs_converter.py <nitro_file> <adobe_file>")
-        print("  python nitro_to_crs_converter.py <nitro_dir> <adobe_dir>")
+        print("  python nitro_to_crs_converter.py <nitro_file>                    # Pretty-print editModel contents")
+        print("  python nitro_to_crs_converter.py <nitro_dir>                     # Pretty-print all editModel contents")  
+        print("  python nitro_to_crs_converter.py <nitro_file> <adobe_file>       # Update single Adobe XMP file")
+        print("  python nitro_to_crs_converter.py <nitro_dir> <adobe_dir>         # Update Adobe XMP directory")
         print("")
-        print("This script updates existing Adobe XMP files with crop settings from Nitro XMP files.")
+        print("This script can either inspect Nitro XMP files or update existing Adobe XMP files with crop settings.")
         sys.exit(1)
     
     nitro_path = sys.argv[1]
-    adobe_path = sys.argv[2]
-    
     converter = NitroToCRSConverter()
+    
+    # If only one argument provided, pretty-print the editModel contents
+    if len(sys.argv) == 2:
+        if os.path.isfile(nitro_path):
+            # Pretty-print single file
+            converter.pretty_print_editmodel(nitro_path)
+        elif os.path.isdir(nitro_path):
+            # Pretty-print all files in directory
+            nitro_dir = Path(nitro_path)
+            nitro_files = sorted(nitro_dir.glob("*.xmp"))
+            
+            if not nitro_files:
+                print(f"No XMP files found in {nitro_path}")
+                return
+            
+            print(f"Found {len(nitro_files)} Nitro XMP files")
+            
+            for nitro_file in nitro_files:
+                converter.pretty_print_editmodel(str(nitro_file))
+        else:
+            print(f"Error: {nitro_path} is not a valid file or directory")
+            sys.exit(1)
+        return
+    
+    # Two arguments provided - conversion mode
+    adobe_path = sys.argv[2]
     
     if os.path.isfile(nitro_path) and os.path.isfile(adobe_path):
         # Convert single file pair
