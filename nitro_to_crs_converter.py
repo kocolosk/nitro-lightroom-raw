@@ -167,72 +167,92 @@ class NitroToCRSConverter:
             print(f"Error converting crop data: {e}")
             return {}
 
-    def create_adobe_xmp(self, original_xmp_path, crs_crop_data):
+    def update_adobe_xmp(self, adobe_xmp_path, crs_crop_data):
         """
-        Create a new XMP file with Adobe CRS crop settings.
+        Update an existing Adobe XMP file with CRS crop settings.
         
         Args:
-            original_xmp_path (str): Path to the original XMP file
+            adobe_xmp_path (str): Path to the existing Adobe XMP file to update
             crs_crop_data (dict): CRS crop properties
             
         Returns:
-            str: XML content for the new XMP file
+            bool: True if successful, False otherwise
         """
-        # Create the XMP structure
-        xmp_template = '''<?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
-<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="XMP Core 5.5.0">
-   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-      <rdf:Description rdf:about=""
-            xmlns:xmp="http://ns.adobe.com/xap/1.0/"
-            xmlns:crs="http://ns.adobe.com/camera-raw-settings/1.0/">
-         <xmp:CreatorTool>Nitro to CRS Converter</xmp:CreatorTool>
-         <xmp:MetadataDate>{metadata_date}</xmp:MetadataDate>
-{crs_properties}
-      </rdf:Description>
-   </rdf:RDF>
-</x:xmpmeta>
-<?xpacket end="w"?>'''
+        try:
+            # Read the current XMP file
+            with open(adobe_xmp_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+            
+            # Update CRS crop properties using string replacement
+            import re
+            
+            for prop_name, prop_value in crs_crop_data.items():
+                # Convert values to strings
+                if isinstance(prop_value, bool):
+                    value_str = str(prop_value).lower()
+                elif isinstance(prop_value, (int, float)):
+                    if isinstance(prop_value, float):
+                        value_str = f"{prop_value:.6f}"
+                    else:
+                        value_str = str(prop_value)
+                else:
+                    value_str = str(prop_value)
+                
+                # Look for existing property and replace it
+                pattern = rf'{re.escape(prop_name)}="[^"]*"'
+                replacement = f'{prop_name}="{value_str}"'
+                
+                if re.search(pattern, content):
+                    # Replace existing property
+                    content = re.sub(pattern, replacement, content)
+                else:
+                    # Add new property - find a good place to insert it
+                    # Look for other crs: properties and add near them
+                    crs_pattern = r'(crs:[^=]+="[^"]*"\n)'
+                    matches = list(re.finditer(crs_pattern, content))
+                    if matches:
+                        # Insert after the last crs: property
+                        last_match = matches[-1]
+                        insert_pos = last_match.end()
+                        # Match the indentation of the previous line
+                        prev_line_start = content.rfind('\n', 0, last_match.start()) + 1
+                        prev_line = content[prev_line_start:last_match.start()]
+                        indent = len(prev_line) - len(prev_line.lstrip())
+                        new_line = ' ' * indent + f'{prop_name}="{value_str}"\n'
+                        content = content[:insert_pos] + new_line + content[insert_pos:]
+            
+            # Write the updated content back to the file
+            with open(adobe_xmp_path, 'w', encoding='utf-8') as f:
+                f.write(content)
+            
+            return True
+            
+        except Exception as e:
+            print(f"Error updating {adobe_xmp_path}: {e}")
+            return False
 
-        # Format CRS properties
-        crs_props = []
-        for key, value in crs_crop_data.items():
-            if isinstance(value, bool):
-                crs_props.append(f'         <{key}>{str(value).lower()}</{key}>')
-            elif isinstance(value, (int, float)):
-                crs_props.append(f'         <{key}>{value}</{key}>')
-            else:
-                crs_props.append(f'         <{key}>{value}</{key}>')
-        
-        # Generate current timestamp
-        current_time = datetime.now().astimezone().isoformat()
-        
-        return xmp_template.format(
-            metadata_date=current_time,
-            crs_properties='\n'.join(crs_props)
-        )
-
-    def convert_file(self, input_path, output_dir):
+    def convert_file(self, nitro_path, adobe_path):
         """
-        Convert a single Nitro XMP file to Adobe CRS format.
+        Convert crop settings from a Nitro XMP file and update the corresponding Adobe XMP file.
         
         Args:
-            input_path (str): Path to input XMP file
-            output_dir (str): Directory to save converted file
+            nitro_path (str): Path to Nitro XMP file
+            adobe_path (str): Path to Adobe XMP file to update
             
         Returns:
             bool: True if conversion successful, False otherwise
         """
         try:
-            # Extract plist data
-            plist_data = self.extract_plist_from_xmp(input_path)
+            # Extract plist data from Nitro file
+            plist_data = self.extract_plist_from_xmp(nitro_path)
             if not plist_data:
-                print(f"No Nitro edit model found in {input_path}")
+                print(f"No Nitro edit model found in {nitro_path}")
                 return False
             
             # Get original image dimensions
             original_size = plist_data.get('originalImagePixelSize')
             if not original_size:
-                print(f"No originalImagePixelSize found in {input_path}")
+                print(f"No originalImagePixelSize found in {nitro_path}")
                 return False
             
             width, height = self.parse_size_string(original_size)
@@ -253,86 +273,93 @@ class NitroToCRSConverter:
                                 break
             
             if not crs_crop_data:
-                print(f"No crop data found in {input_path}")
+                print(f"No crop data found in {nitro_path}")
                 return False
             
-            # Create output XMP content
-            xmp_content = self.create_adobe_xmp(input_path, crs_crop_data)
+            # Check if Adobe XMP file exists
+            if not os.path.exists(adobe_path):
+                print(f"Adobe XMP file not found: {adobe_path}")
+                return False
             
-            # Write to output file
-            input_filename = Path(input_path).name
-            output_path = Path(output_dir) / input_filename
-            
-            with open(output_path, 'w', encoding='utf-8') as f:
-                f.write(xmp_content)
-            
-            print(f"Converted {input_filename} -> {output_path}")
-            print(f"  Original size: {width}x{height}")
-            print(f"  CRS crop: Left={crs_crop_data.get('crs:CropLeft', 0):.4f}, "
-                  f"Top={crs_crop_data.get('crs:CropTop', 0):.4f}, "
-                  f"Right={crs_crop_data.get('crs:CropRight', 1):.4f}, "
-                  f"Bottom={crs_crop_data.get('crs:CropBottom', 1):.4f}")
-            
-            return True
+            # Update the existing Adobe XMP file
+            if self.update_adobe_xmp(adobe_path, crs_crop_data):
+                print(f"Updated {Path(adobe_path).name} with crop settings from {Path(nitro_path).name}")
+                print(f"  Original size: {width}x{height}")
+                print(f"  CRS crop: Left={crs_crop_data.get('crs:CropLeft', 0):.4f}, "
+                      f"Top={crs_crop_data.get('crs:CropTop', 0):.4f}, "
+                      f"Right={crs_crop_data.get('crs:CropRight', 1):.4f}, "
+                      f"Bottom={crs_crop_data.get('crs:CropBottom', 1):.4f}")
+                return True
+            else:
+                print(f"Failed to update {adobe_path}")
+                return False
             
         except Exception as e:
-            print(f"Error converting {input_path}: {e}")
+            print(f"Error converting {nitro_path}: {e}")
             return False
 
-    def convert_directory(self, input_dir, output_dir):
+    def convert_directory(self, nitro_dir, adobe_dir):
         """
-        Convert all XMP files in a directory from Nitro to CRS format.
+        Convert all XMP files from Nitro directory and update corresponding files in Adobe directory.
         
         Args:
-            input_dir (str): Input directory path
-            output_dir (str): Output directory path
+            nitro_dir (str): Nitro XMP files directory path
+            adobe_dir (str): Adobe XMP files directory path
         """
-        input_path = Path(input_dir)
-        output_path = Path(output_dir)
+        nitro_path = Path(nitro_dir)
+        adobe_path = Path(adobe_dir)
         
-        # Create output directory if it doesn't exist
-        output_path.mkdir(parents=True, exist_ok=True)
-        
-        # Find all XMP files
-        xmp_files = sorted(input_path.glob("*.xmp"))
-        
-        if not xmp_files:
-            print(f"No XMP files found in {input_dir}")
+        if not adobe_path.exists():
+            print(f"Adobe directory '{adobe_dir}' not found")
             return
         
-        print(f"Found {len(xmp_files)} XMP files to process")
+        # Find all XMP files in Nitro directory
+        nitro_files = sorted(nitro_path.glob("*.xmp"))
+        
+        if not nitro_files:
+            print(f"No XMP files found in {nitro_dir}")
+            return
+        
+        print(f"Found {len(nitro_files)} Nitro XMP files to process")
         
         successful = 0
-        for xmp_file in xmp_files:
-            if self.convert_file(str(xmp_file), str(output_path)):
-                successful += 1
+        for nitro_file in nitro_files:
+            # Find corresponding Adobe XMP file
+            adobe_file = adobe_path / nitro_file.name
+            
+            if adobe_file.exists():
+                if self.convert_file(str(nitro_file), str(adobe_file)):
+                    successful += 1
+            else:
+                print(f"Adobe XMP file not found for {nitro_file.name}, skipping...")
         
-        print(f"\nConversion complete: {successful}/{len(xmp_files)} files converted successfully")
+        print(f"\nConversion complete: {successful}/{len(nitro_files)} files updated successfully")
 
 
 def main():
     if len(sys.argv) < 3:
         print("Usage:")
-        print("  python nitro_to_crs_converter.py <input_file> <output_file>")
-        print("  python nitro_to_crs_converter.py <input_dir> <output_dir>")
+        print("  python nitro_to_crs_converter.py <nitro_file> <adobe_file>")
+        print("  python nitro_to_crs_converter.py <nitro_dir> <adobe_dir>")
+        print("")
+        print("This script updates existing Adobe XMP files with crop settings from Nitro XMP files.")
         sys.exit(1)
     
-    input_path = sys.argv[1]
-    output_path = sys.argv[2]
+    nitro_path = sys.argv[1]
+    adobe_path = sys.argv[2]
     
     converter = NitroToCRSConverter()
     
-    if os.path.isfile(input_path):
-        # Convert single file
-        output_dir = os.path.dirname(output_path)
-        if output_dir:
-            os.makedirs(output_dir, exist_ok=True)
-        converter.convert_file(input_path, output_dir)
-    elif os.path.isdir(input_path):
-        # Convert directory
-        converter.convert_directory(input_path, output_path)
+    if os.path.isfile(nitro_path) and os.path.isfile(adobe_path):
+        # Convert single file pair
+        converter.convert_file(nitro_path, adobe_path)
+    elif os.path.isdir(nitro_path) and os.path.isdir(adobe_path):
+        # Convert directories
+        converter.convert_directory(nitro_path, adobe_path)
     else:
-        print(f"Error: {input_path} is not a valid file or directory")
+        print(f"Error: Both paths must be either files or directories")
+        print(f"  Nitro path: {nitro_path} ({'file' if os.path.isfile(nitro_path) else 'directory' if os.path.isdir(nitro_path) else 'not found'})")
+        print(f"  Adobe path: {adobe_path} ({'file' if os.path.isfile(adobe_path) else 'directory' if os.path.isdir(adobe_path) else 'not found'})")
         sys.exit(1)
 
 
