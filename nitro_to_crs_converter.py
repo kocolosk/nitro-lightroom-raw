@@ -92,9 +92,8 @@ class NitroToCRSConverter:
         """
         Convert Nitro's crop data to Adobe CRS format.
         
-        Nitro cropRect format: [[x1, y1], [x2, y2]] where:
+        Nitro cropRect format: [[x1, y1], [width, height]] where:
         - (x1, y1) is the lower-left corner
-        - (x2, y2) is the upper-right corner
         
         Adobe CRS format uses normalized coordinates (0-1) with:
         - CropLeft: left edge
