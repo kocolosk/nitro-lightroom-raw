@@ -188,7 +188,7 @@ class NitroToCRSConverter:
             for prop_name, prop_value in crs_crop_data.items():
                 # Convert values to strings
                 if isinstance(prop_value, bool):
-                    value_str = str(prop_value).lower()
+                    value_str = str(prop_value)
                 elif isinstance(prop_value, (int, float)):
                     if isinstance(prop_value, float):
                         value_str = f"{prop_value:.6f}"
