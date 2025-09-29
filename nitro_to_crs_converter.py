@@ -441,6 +441,7 @@ class NitroToCRSConverter:
             if self.update_adobe_xmp(adobe_path, crs_crop_data):
                 print(f"Updated {Path(adobe_path).name} with crop settings from {Path(nitro_path).name}")
                 print(f"  Original size: {width}x{height}")
+                print(f"  Rotation angle: {crs_crop_data.get('crs:CropAngle', 0):.8f}")
                 print(f"  CRS crop: Left={crs_crop_data.get('crs:CropLeft', 0):.4f}, "
                       f"Top={crs_crop_data.get('crs:CropTop', 0):.4f}, "
                       f"Right={crs_crop_data.get('crs:CropRight', 1):.4f}, "
