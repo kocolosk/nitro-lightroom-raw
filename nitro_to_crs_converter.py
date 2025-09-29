@@ -9,6 +9,8 @@ import plistlib
 import json
 import sys
 import os
+import math
+
 from pathlib import Path
 from datetime import datetime
 
@@ -88,50 +90,54 @@ class NitroToCRSConverter:
         except (ValueError, IndexError):
             return None
 
-    def calculate_optimal_rotation_crop(self, original_width, original_height, rotation_degrees):
+    def compute_lightroom_crop(self, width_px: int, height_px: int, rotation_deg: float):
         """
-        Calculate the optimal crop coordinates for a rotated image that preserves 
-        the original aspect ratio and maximizes the inscribed rectangle area.
-        
-        Args:
-            original_width (int): Original image width
-            original_height (int): Original image height  
-            rotation_degrees (float): Rotation angle in degrees
-            
-        Returns:
-            tuple: (crop_left, crop_top, crop_right, crop_bottom) in normalized coordinates
-        """
-        import math
-        
-        if rotation_degrees == 0:
-            return (0, 0, 1, 1)  # No rotation, no crop needed
-        
-        aspect_ratio = original_width / original_height
-        theta = math.radians(abs(rotation_degrees))
-        
-        # Normalize angle to [0, π/2] due to symmetry
-        theta = theta % (math.pi / 2)
-        
-        cos_theta = math.cos(theta)
-        sin_theta = math.sin(theta)
-        
-        # Calculate the scaling factor for the optimal inscribed rectangle
-        if theta == 0:
-            scale_factor = 1.0
-        else:
-            r = aspect_ratio
-            numerator = r * cos_theta**2 + sin_theta**2
-            denominator = (r * sin_theta + cos_theta) * (sin_theta + r * cos_theta)
-            scale_factor = numerator / denominator
-        
-        # Calculate the crop margins (equal on all sides to center the crop)
-        crop_width = math.sqrt(scale_factor)
-        crop_height = math.sqrt(scale_factor)
-        
-        margin_x = (1 - crop_width) / 2
-        margin_y = (1 - crop_height) / 2
+        Compute crs:CropLeft and crs:CropTop (normalized 0..1) for a rotation-only auto-crop
+        that preserves the original aspect ratio and maximizes area, matching Lightroom.
 
-        return (margin_x, margin_y, 1 - margin_x, 1 - margin_y)
+        Args:
+            width_px:  original image width in pixels (W)
+            height_px: original image height in pixels (H)
+            rotation_deg: rotation angle in degrees (Lightroom/CRS: positive=counter-clockwise)
+
+        Returns:
+            (crop_left, crop_top) as floats in [0, 0.5]
+        """
+        W = float(width_px)
+        H = float(height_px)
+        if W <= 0 or H <= 0:
+            return 0.0, 0.0
+
+        theta = abs(math.radians(rotation_deg))
+        if theta < 1e-9:
+            return 0.0, 0.0
+
+        c = math.cos(theta)
+        s = math.sin(theta)
+
+        # Scale of the maximal inscribed rectangle (same aspect as original) in the rotated frame
+        # t is chosen by the limiting axis (min of the two).
+        t_w = W / (W * c + H * s)
+        t_h = H / (W * s + H * c)
+        t = min(t_w, t_h)
+
+        # Choose CropLeft so that the back-rotated crop AABB width matches the original width.
+        # This makes the horizontal AABB constraint tight.
+        L_px = 0.5 * (W - t * (W * c + H * s))
+        if L_px < 0:
+            L_px = 0.0
+
+        # Solve CropTop so that the rotated crop height equals the target rotated height (t * H).
+        # (W - 2L)*s + (H - 2T)*c = t * H  ->  solve for T.
+        target_H_rot = t * H
+        A = W - 2.0 * L_px
+        T_px = 0.5 * (H - (target_H_rot - A * s) / max(c, 1e-12))
+        if T_px < 0:
+            T_px = 0.0
+
+        crop_left = min(max(L_px / W, 0.0), 0.5)
+        crop_top = min(max(T_px / H, 0.0), 0.5)
+        return (crop_left, crop_top, 1.0 - crop_left, 1.0 - crop_top)
 
     def nitro_crop_to_crs(self, crop_data, original_width, original_height):
         """
@@ -178,7 +184,7 @@ class NitroToCRSConverter:
             # Special case: if all crop values are zero, this is a rotation-only edit
             if x1 == 0 and y1 == 0 and w == 0 and h == 0:
                 # Calculate optimal crop to preserve aspect ratio during rotation
-                crop_left, crop_top, crop_right, crop_bottom = self.calculate_optimal_rotation_crop(
+                crop_left, crop_top, crop_right, crop_bottom = self.compute_lightroom_crop(
                     original_width, original_height, straighten
                 )
                 
