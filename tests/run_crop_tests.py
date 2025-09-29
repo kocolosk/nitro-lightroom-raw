@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Lightweight test harness for compute_lightroom_crop in nitro_to_crs_converter.py.
+Lightweight test harness for compute_lightroom_crop_unit_square in nitro_to_crs_converter.py.
 
 Usage:
   python tests/run_crop_tests.py                      # uses tests/crop_tests.json if present
@@ -99,7 +99,7 @@ def main():
             failures += 1
             continue
 
-        cl, ct, cr, cb = conv.compute_lightroom_crop(int(W), int(H), float(deg))
+        cl, ct, cr, cb = conv.compute_lightroom_crop_unit_square(int(W), int(H), float(deg))
         rw = W * (cr - cl)
         rh = H * (cb - ct)
         ar = (rw / rh) if rh else float("inf")

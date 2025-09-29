@@ -13,6 +13,6 @@
     "height": 4640,
     "rotation_deg": 2.103972,
     "expected": { "left": 0.037739, "top": 0.0 },
-    "tolerance": 0.002
+    "tolerance": 0.001
   }
 ]
