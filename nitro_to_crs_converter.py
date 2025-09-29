@@ -126,12 +126,12 @@ class NitroToCRSConverter:
         
         # Calculate the crop margins (equal on all sides to center the crop)
         crop_width = math.sqrt(scale_factor)
-        # crop_height = math.sqrt(scale_factor)
+        crop_height = math.sqrt(scale_factor)
         
-        margin_x = (1 - crop_width)
-        # margin_y = (1 - crop_height) / 2
-        
-        return (margin_x, 0, 1 - margin_x, 1)
+        margin_x = (1 - crop_width) / 2
+        margin_y = (1 - crop_height) / 2
+
+        return (margin_x, margin_y, 1 - margin_x, 1 - margin_y)
 
     def nitro_crop_to_crs(self, crop_data, original_width, original_height):
         """
@@ -185,7 +185,7 @@ class NitroToCRSConverter:
                 crs_crop = {
                     'crs:CropAngle': straighten,
                     'crs:HasCrop': True,  # Set to True since we're applying a computed crop
-                    'crs:CropConstrainToWarp': False,
+                    'crs:CropConstrainToWarp': 0,
                     'crs:CropLeft': crop_left,
                     'crs:CropTop': crop_top,
                     'crs:CropRight': crop_right,
