@@ -88,6 +88,51 @@ class NitroToCRSConverter:
         except (ValueError, IndexError):
             return None
 
+    def calculate_optimal_rotation_crop(self, original_width, original_height, rotation_degrees):
+        """
+        Calculate the optimal crop coordinates for a rotated image that preserves 
+        the original aspect ratio and maximizes the inscribed rectangle area.
+        
+        Args:
+            original_width (int): Original image width
+            original_height (int): Original image height  
+            rotation_degrees (float): Rotation angle in degrees
+            
+        Returns:
+            tuple: (crop_left, crop_top, crop_right, crop_bottom) in normalized coordinates
+        """
+        import math
+        
+        if rotation_degrees == 0:
+            return (0, 0, 1, 1)  # No rotation, no crop needed
+        
+        aspect_ratio = original_width / original_height
+        theta = math.radians(abs(rotation_degrees))
+        
+        # Normalize angle to [0, π/2] due to symmetry
+        theta = theta % (math.pi / 2)
+        
+        cos_theta = math.cos(theta)
+        sin_theta = math.sin(theta)
+        
+        # Calculate the scaling factor for the optimal inscribed rectangle
+        if theta == 0:
+            scale_factor = 1.0
+        else:
+            r = aspect_ratio
+            numerator = r * cos_theta**2 + sin_theta**2
+            denominator = (r * sin_theta + cos_theta) * (sin_theta + r * cos_theta)
+            scale_factor = numerator / denominator
+        
+        # Calculate the crop margins (equal on all sides to center the crop)
+        crop_width = math.sqrt(scale_factor)
+        # crop_height = math.sqrt(scale_factor)
+        
+        margin_x = (1 - crop_width)
+        # margin_y = (1 - crop_height) / 2
+        
+        return (margin_x, 0, 1 - margin_x, 1)
+
     def nitro_crop_to_crs(self, crop_data, original_width, original_height):
         """
         Convert Nitro's crop data to Adobe CRS format.
@@ -132,20 +177,21 @@ class NitroToCRSConverter:
 
             # Special case: if all crop values are zero, this is a rotation-only edit
             if x1 == 0 and y1 == 0 and w == 0 and h == 0:
+                # Calculate optimal crop to preserve aspect ratio during rotation
+                crop_left, crop_top, crop_right, crop_bottom = self.calculate_optimal_rotation_crop(
+                    original_width, original_height, straighten
+                )
+                
                 crs_crop = {
                     'crs:CropAngle': straighten,
-                    'crs:HasCrop': False,  # Key: no manual crop
+                    'crs:HasCrop': True,  # Set to True since we're applying a computed crop
                     'crs:CropConstrainToWarp': False,
-                    # 'crs:CropLeft': 0,
-                    # 'crs:CropTop': 0,
-                    # 'crs:CropRight': 1,
-                    # 'crs:CropBottom': 1,
-                    # 'crs:AutoLateralCA': 0,  # Prevent auto lateral CA correction
-                    # 'crs:LensProfileEnable': 0,  # Disable lens corrections that might affect crop
-                    # 'crs:PerspectiveRotate': 0,  # No perspective rotation
-                    # 'crs:PerspectiveAspect': 0,  # Maintain original aspect
-                    # 'crs:PerspectiveScale': 100,  # No perspective scaling
+                    'crs:CropLeft': crop_left,
+                    'crs:CropTop': crop_top,
+                    'crs:CropRight': crop_right,
+                    'crs:CropBottom': crop_bottom,
                 }
+                print(f"  Rotation-only (angle={straighten}°), computed optimal crop: [{crop_left:.4f}, {crop_top:.4f}, {crop_right:.4f}, {crop_bottom:.4f}]")
             else:            
                 # Convert to normalized coordinates (0-1)
                 # Note: Nitro uses bottom-left origin, Adobe uses top-left
