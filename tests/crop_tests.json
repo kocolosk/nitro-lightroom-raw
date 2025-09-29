@@ -1,0 +1,18 @@
+[
+  {
+    "name": "9O0A0700",
+    "width": 6960,
+    "height": 4640,
+    "rotation_deg": -0.895569,
+    "expected": { "left": 0.006364, "top": 0.022911 },
+    "tolerance": 0.001
+  },
+  {
+    "name": "9O0A0824",
+    "width": 6960,
+    "height": 4640,
+    "rotation_deg": 2.103972,
+    "expected": { "left": 0.037739, "top": 0.0 },
+    "tolerance": 0.002
+  }
+]
