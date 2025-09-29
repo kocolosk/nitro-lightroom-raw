@@ -139,6 +139,141 @@ class NitroToCRSConverter:
         crop_top = min(max(T_px / H, 0.0), 0.5)
         return (crop_left, crop_top, 1.0 - crop_left, 1.0 - crop_top)
 
+    def compute_lightroom_crop_unit_square(self, width_px: int, height_px: int, rotation_deg: float):
+        """
+        Compute CropLeft/Top/Right/Bottom assuming Lightroom's UnitSquare normalization.
+        Strategy:
+        - Normalize original W×H to unit square (scale by 1/W horizontally and 1/H vertically).
+        - Rotate by |theta| about center.
+        - Define crop in the rotated AABB space. Lightroom examples indicate:
+          * For positive rotation, Top often snaps to 0; we solve for Left to preserve original AR.
+          * For negative rotation, solution tends to be centered; we solve symmetrically.
+        - Use a 1D bisection to match target aspect W/H when back-projected to pixel space with
+          Lightroom-like uniform fit scaling.
+        Returns normalized [0..1] margins in the unit-square AABB coordinates.
+        """
+        W = float(width_px)
+        H = float(height_px)
+        if W <= 0 or H <= 0:
+            return 0.0, 0.0, 1.0, 1.0
+
+        theta = abs(math.radians(rotation_deg))
+        if theta < 1e-12:
+            return 0.0, 0.0, 1.0, 1.0
+
+        c = math.cos(theta)
+        s = math.sin(theta)
+
+        # In unit-square normalization, the original bounds are [0,1]x[0,1] pre-rotation.
+        # The rotated unit-square AABB has width_u = c + s and height_u = c + s (symmetric for unit square).
+        # We then place a crop box inside [0,1] in the rotated-AABB normalized coordinates.
+
+        # Helper: given crop margins (l,t,r,b) in rotated-AABB normalized coords, compute the
+        # resulting pixel-space crop width and height after inverse transforms with uniform fit.
+        def pixel_size_from_unitAABB(l, t, r, b):
+            # Selected width/height in AABB-normalized space
+            sel_w = max(0.0, r - l)
+            sel_h = max(0.0, b - t)
+            # Inverse of AABB scale back to rotated unit square:
+            # Rotated unit square AABB size equals (c + s) by (c + s).
+            aabb_w = c + s
+            aabb_h = c + s
+            w_rot = sel_w * aabb_w
+            h_rot = sel_h * aabb_h
+
+            # Now rotate-undo back to unit square. The maximal axis-aligned inscribed rectangle
+            # of a rotated rectangle of size (w_rot, h_rot) when un-rotating by theta has size:
+            # (w0, h0) = (w_rot*c - h_rot*s, w_rot*s + h_rot*c) in one orientation.
+            # Use absolute mapping for extents; keep positive values.
+            w0 = max(0.0, w_rot * c + h_rot * s)
+            h0 = max(0.0, w_rot * s + h_rot * c)
+
+            # Map unit square to pixels anisotropically (W by H), then Lightroom applies a uniform
+            # fit scaling to keep original AR; that uniform scale cancels in ratio.
+            pw = W * w0
+            ph = H * h0
+            return pw, ph
+
+        target_ar = W / H
+
+        if rotation_deg >= 0:
+            # Positive rotation: set Top=0, Bottom=1 as observed; solve for Left in [0, 0.5]
+            t, b = 0.0, 1.0
+            lo, hi = 0.0, 0.5
+
+            def f(x):
+                l, r = x, 1.0 - x
+                pw, ph = pixel_size_from_unitAABB(l, t, r, b)
+                return (pw / max(ph, 1e-12)) - target_ar
+
+            # If f(0)<=0, AR is already <= target; if f(0.5)>=0, AR too wide; bisection handles.
+            f_lo = f(lo)
+            f_hi = f(hi)
+            # Ensure we have opposite signs; if not, clamp to the closer end
+            if f_lo == 0:
+                x = lo
+            elif f_hi == 0:
+                x = hi
+            elif f_lo * f_hi > 0:
+                x = lo if abs(f_lo) < abs(f_hi) else hi
+            else:
+                # Bisection
+                for _ in range(50):
+                    mid = 0.5 * (lo + hi)
+                    fm = f(mid)
+                    if abs(fm) < 1e-9:
+                        x = mid
+                        break
+                    if f_lo * fm <= 0:
+                        hi = mid
+                        f_hi = fm
+                    else:
+                        lo = mid
+                        f_lo = fm
+                else:
+                    x = 0.5 * (lo + hi)
+
+            l = x
+            r = 1.0 - x
+            return (l, t, r, b)
+
+        # Negative rotation: solve symmetric margins to preserve AR (centered crop)
+        lo, hi = 0.0, 0.5
+
+        def g(x):
+            l = t = x
+            r = b = 1.0 - x
+            pw, ph = pixel_size_from_unitAABB(l, t, r, b)
+            return (pw / max(ph, 1e-12)) - target_ar
+
+        g_lo = g(lo)
+        g_hi = g(hi)
+        if g_lo == 0:
+            x = lo
+        elif g_hi == 0:
+            x = hi
+        elif g_lo * g_hi > 0:
+            x = lo if abs(g_lo) < abs(g_hi) else hi
+        else:
+            for _ in range(50):
+                mid = 0.5 * (lo + hi)
+                gm = g(mid)
+                if abs(gm) < 1e-9:
+                    x = mid
+                    break
+                if g_lo * gm <= 0:
+                    hi = mid
+                    g_hi = gm
+                else:
+                    lo = mid
+                    g_lo = gm
+            else:
+                x = 0.5 * (lo + hi)
+
+        l = t = x
+        r = b = 1.0 - x
+        return (l, t, r, b)
+
     def nitro_crop_to_crs(self, crop_data, original_width, original_height):
         """
         Convert Nitro's crop data to Adobe CRS format.
@@ -184,7 +319,8 @@ class NitroToCRSConverter:
             # Special case: if all crop values are zero, this is a rotation-only edit
             if x1 == 0 and y1 == 0 and w == 0 and h == 0:
                 # Calculate optimal crop to preserve aspect ratio during rotation
-                crop_left, crop_top, crop_right, crop_bottom = self.compute_lightroom_crop(
+                # Use UnitSquare-aware solver to match Lightroom behavior
+                crop_left, crop_top, crop_right, crop_bottom = self.compute_lightroom_crop_unit_square(
                     original_width, original_height, straighten
                 )
                 
@@ -192,6 +328,7 @@ class NitroToCRSConverter:
                     'crs:CropAngle': straighten,
                     'crs:HasCrop': True,  # Set to True since we're applying a computed crop
                     'crs:CropConstrainToWarp': 0,
+                    'crs:CropConstrainToUnitSquare': 1,
                     'crs:CropLeft': crop_left,
                     'crs:CropTop': crop_top,
                     'crs:CropRight': crop_right,
@@ -215,7 +352,8 @@ class NitroToCRSConverter:
                     'crs:CropRight': crop_right,
                     'crs:CropBottom': crop_bottom,
                     'crs:CropAngle': straighten,
-                    'crs:HasCrop': True
+                    'crs:HasCrop': True,
+                    'crs:CropConstrainToUnitSquare': 1
                 }
                 
                 # Add aspect ratio constraint if available
