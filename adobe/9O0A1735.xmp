@@ -3,7 +3,6 @@
   <rdf:Description rdf:about=""
     xmlns:xmp="http://ns.adobe.com/xap/1.0/"
     xmlns:nitro="http://com.gentlemencoders/xmp/nitro/1.0/"
-    xmlns:crs="http://ns.adobe.com/camera-raw-settings/1.0/"
     xmlns:mwg-rs="http://www.metadataworkinggroup.com/schemas/regions/"
     xmlns:tiff="http://ns.adobe.com/tiff/1.0/"
     xmlns:exif="http://ns.adobe.com/exif/1.0/"
@@ -12,14 +11,76 @@
     xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/"
     xmlns:stEvt="http://ns.adobe.com/xap/1.0/sType/ResourceEvent#"
+    xmlns:crd="http://ns.adobe.com/camera-raw-defaults/1.0/"
+    xmlns:xmpDM="http://ns.adobe.com/xmp/1.0/DynamicMedia/"
+    xmlns:crs="http://ns.adobe.com/camera-raw-settings/1.0/"
    xmp:CreatorTool="Nitro"
-   xmp:MetadataDate="2025-09-18T23:07:45-04:00"
+   xmp:MetadataDate="2025-09-19T19:46-04:00"
    xmp:Rating="2"
    xmp:CreateDate="2025-06-29T14:07:58.24-04:00"
    xmp:ModifyDate="2025-06-29T14:07:58.24-04:00"
    nitro:EditModel="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#xA;&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;&#xA;&lt;plist version=&quot;1.0&quot;&gt;&#xA;&lt;dict&gt;&#xA;&#x9;&lt;key&gt;compression&lt;/key&gt;&#xA;&#x9;&lt;integer&gt;0&lt;/integer&gt;&#xA;&#x9;&lt;key&gt;editModel&lt;/key&gt;&#xA;&#x9;&lt;string&gt;{&quot;editingJPEGHalf&quot;:false,&quot;currentVersionIndex&quot;:0,&quot;formatVersion&quot;:1,&quot;lowResMask&quot;:false,&quot;defaultOrientation&quot;:1,&quot;versions&quot;:[{&quot;adjDataArr&quot;:[{&quot;json&quot;:&quot;{\&quot;bpIsAbs\&quot;:false,\&quot;wpIsAbs\&quot;:false,\&quot;disclosed\&quot;:false,\&quot;numeric\&quot;:{\&quot;highlights\&quot;:1,\&quot;toneMap\&quot;:0,\&quot;boost\&quot;:0.6722394,\&quot;boostShadowSliderValue\&quot;:0.9,\&quot;shadows\&quot;:0.078101955,\&quot;blackPointDelta\&quot;:0,\&quot;midtones\&quot;:1,\&quot;recovery\&quot;:-0.3277606,\&quot;exposure\&quot;:0,\&quot;whitePointDelta\&quot;:-0.19665638},\&quot;defaultsUpdated\&quot;:true,\&quot;preserve\&quot;:false,\&quot;enabled\&quot;:true,\&quot;baseBlackPoint\&quot;:3,\&quot;supportsToneMap\&quot;:false,\&quot;baseWhitePoint\&quot;:0.5,\&quot;supportsBoost\&quot;:true}&quot;,&quot;id&quot;:&quot;Tone&quot;},{&quot;json&quot;:&quot;{\&quot;enabled\&quot;:true,\&quot;disclosed\&quot;:true,\&quot;numeric\&quot;:{\&quot;straighten\&quot;:1.7925261},\&quot;aspectRatioType\&quot;:0,\&quot;cropRect\&quot;:[[361.1980059782686,100.55477869227025],[6280,4186.666666666666]],\&quot;orientationIsRelative\&quot;:false}&quot;,&quot;id&quot;:&quot;Crop&quot;},{&quot;json&quot;:&quot;{\&quot;enabled\&quot;:true,\&quot;disclosed\&quot;:false,\&quot;numeric\&quot;:{\&quot;contrast\&quot;:1,\&quot;deepen\&quot;:0,\&quot;saturation\&quot;:1,\&quot;lighten\&quot;:0,\&quot;vibrancy\&quot;:0.020852907}}&quot;,&quot;id&quot;:&quot;Enhance&quot;},{&quot;json&quot;:&quot;{\&quot;levelsCurvesData\&quot;:{\&quot;operateOnGray\&quot;:true,\&quot;curves\&quot;:true,\&quot;autoAlgorithm\&quot;:0,\&quot;gamma\&quot;:true,\&quot;histogramMaxValue\&quot;:1,\&quot;pointsArray\&quot;:[[{\&quot;y\&quot;:0,\&quot;deletable\&quot;:false,\&quot;x\&quot;:0,\&quot;inactive\&quot;:false,\&quot;isWhitePoint\&quot;:false,\&quot;invisible\&quot;:true},{\&quot;y\&quot;:0,\&quot;deletable\&quot;:false,\&quot;x\&quot;:0.00031259548,\&quot;inactive\&quot;:false,\&quot;isWhitePoint\&quot;:false,\&quot;invisible\&quot;:false},{\&quot;y\&quot;:0.2643332,\&quot;deletable\&quot;:true,\&quot;x\&quot;:0.27799782,\&quot;inactive\&quot;:false,\&quot;isWhitePoint\&quot;:false,\&quot;invisible\&quot;:false},{\&quot;y\&quot;:0.5144546,\&quot;deletable\&quot;:true,\&quot;x\&quot;:0.5147398,\&quot;inactive\&quot;:false,\&quot;isWhitePoint\&quot;:false,\&quot;invisible\&quot;:false},{\&quot;y\&quot;:0.7530765,\&quot;deletable\&quot;:true,\&quot;x\&quot;:0.7453204,\&quot;inactive\&quot;:false,\&quot;isWhitePoint\&quot;:false,\&quot;invisible\&quot;:false},{\&quot;y\&quot;:1,\&quot;deletable\&quot;:false,\&quot;x\&quot;:0.9999641,\&quot;inactive\&quot;:false,\&quot;isWhitePoint\&quot;:true,\&quot;invisible\&quot;:false},{\&quot;y\&quot;:2,\&quot;deletable\&quot;:false,\&quot;x\&quot;:2,\&quot;inactive\&quot;:false,\&quot;isWhitePoint\&quot;:false,\&quot;invisible\&quot;:true}],[{\&quot;y\&quot;:0,\&quot;deletable\&quot;:false,\&quot;x\&quot;:0,\&quot;inactive\&quot;:false,\&quot;isWhitePoint\&quot;:false,\&quot;invisible\&quot;:true},{\&quot;y\&quot;:0,\&quot;deletable\&quot;:false,\&quot;x\&quot;:0,\&quot;inactive\&quot;:false,\&quot;isWhitePoint\&quot;:false,\&quot;invisible\&quot;:false},{\&quot;y\&quot;:1,\&quot;deletable\&quot;:false,\&quot;x\&quot;:1,\&quot;inactive\&quot;:false,\&quot;isWhitePoint\&quot;:true,\&quot;invisible\&quot;:false},{\&quot;y\&quot;:2,\&quot;deletable\&quot;:false,\&quot;x\&quot;:2,\&quot;inactive\&quot;:false,\&quot;isWhitePoint\&quot;:false,\&quot;invisible\&quot;:true}],[{\&quot;y\&quot;:0,\&quot;deletable\&quot;:false,\&quot;x\&quot;:0,\&quot;inactive\&quot;:false,\&quot;isWhitePoint\&quot;:false,\&quot;invisible\&quot;:true},{\&quot;y\&quot;:0,\&quot;deletable\&quot;:false,\&quot;x\&quot;:0,\&quot;inactive\&quot;:false,\&quot;isWhitePoint\&quot;:false,\&quot;invisible\&quot;:false},{\&quot;y\&quot;:1,\&quot;deletable\&quot;:false,\&quot;x\&quot;:1,\&quot;inactive\&quot;:false,\&quot;isWhitePoint\&quot;:true,\&quot;invisible\&quot;:false},{\&quot;y\&quot;:2,\&quot;deletable\&quot;:false,\&quot;x\&quot;:2,\&quot;inactive\&quot;:false,\&quot;isWhitePoint\&quot;:false,\&quot;invisible\&quot;:true}],[{\&quot;y\&quot;:0,\&quot;deletable\&quot;:false,\&quot;x\&quot;:0,\&quot;inactive\&quot;:false,\&quot;isWhitePoint\&quot;:false,\&quot;invisible\&quot;:true},{\&quot;y\&quot;:0,\&quot;deletable\&quot;:false,\&quot;x\&quot;:0,\&quot;inactive\&quot;:false,\&quot;isWhitePoint\&quot;:false,\&quot;invisible\&quot;:false},{\&quot;y\&quot;:1,\&quot;deletable\&quot;:false,\&quot;x\&quot;:1,\&quot;inactive\&quot;:false,\&quot;isWhitePoint\&quot;:true,\&quot;invisible\&quot;:false},{\&quot;y\&quot;:2,\&quot;deletable\&quot;:false,\&quot;x\&quot;:2,\&quot;inactive\&quot;:false,\&quot;isWhitePoint\&quot;:false,\&quot;invisible\&quot;:true}]],\&quot;maxValue\&quot;:2},\&quot;name\&quot;:\&quot;Curves\&quot;,\&quot;enabled\&quot;:true,\&quot;id\&quot;:\&quot;Curves\&quot;,\&quot;disclosed\&quot;:false,\&quot;localizedName\&quot;:\&quot;Curves\&quot;,\&quot;numeric\&quot;:{}}&quot;,&quot;id&quot;:&quot;Curves&quot;},{&quot;json&quot;:&quot;{\&quot;disclosed\&quot;:false,\&quot;boost\&quot;:0.5,\&quot;recovery\&quot;:-0.9296875,\&quot;tint\&quot;:-2.051547,\&quot;vibrancy\&quot;:0.031811185,\&quot;enabled\&quot;:true,\&quot;temperature\&quot;:5407.386,\&quot;numeric\&quot;:{\&quot;intensity\&quot;:0.6555212},\&quot;curvePoints\&quot;:[[0.0004768655695235263,0],[0.2779978331628459,0.25715238878611485],[0.5147398241974973,0.5143047775722297],[0.745320362879542,0.7571523887861149],[0.9999452153009716,1]],\&quot;highlights\&quot;:1,\&quot;hasRecoveryBoost\&quot;:true,\&quot;hasTempTint\&quot;:false,\&quot;hasHighlightsShadows\&quot;:true,\&quot;shadows\&quot;:0.11914481,\&quot;hasVibrancy\&quot;:true,\&quot;didRun\&quot;:true}&quot;,&quot;id&quot;:&quot;Auto Enhance&quot;}],&quot;masks&quot;:[]}]}&lt;/string&gt;&#xA;&#x9;&lt;key&gt;editedImagePixelSize&lt;/key&gt;&#xA;&#x9;&lt;string&gt;{6280, 4187}&lt;/string&gt;&#xA;&#x9;&lt;key&gt;format&lt;/key&gt;&#xA;&#x9;&lt;string&gt;com.gentlemencoders.nitro&lt;/string&gt;&#xA;&#x9;&lt;key&gt;originalImagePixelSize&lt;/key&gt;&#xA;&#x9;&lt;string&gt;{6960, 4640}&lt;/string&gt;&#xA;&#x9;&lt;key&gt;version&lt;/key&gt;&#xA;&#x9;&lt;integer&gt;1&lt;/integer&gt;&#xA;&lt;/dict&gt;&#xA;&lt;/plist&gt;&#xA;"
    nitro:OriginalPixelSize="{6960, 4640}"
    nitro:EditedPixelSize="{6280, 4187}"
+   mwg-rs:Regions="nil"
+   tiff:Orientation="1"
+   tiff:Make="Canon"
+   tiff:Model="Canon EOS R7"
+   tiff:ImageWidth="6960"
+   tiff:ImageLength="4640"
+   exif:ApertureValue="2970854/1000000"
+   exif:ExposureBiasValue="0/1"
+   exif:FNumber="28/10"
+   exif:ExposureTime="1/1000"
+   exif:MaxApertureValue="3/1"
+   exif:ShutterSpeedValue="9965784/1000000"
+   exif:DateTimeOriginal="2025-06-29T14:07:58.24-04:00"
+   exif:ExposureProgram="1"
+   exif:FocalLength="31/1"
+   exif:MeteringMode="5"
+   exif:GPSLatitude="42,30.8643N"
+   exif:GPSLongitude="71,41.6112W"
+   exif:GPSAltitude="553/5"
+   exif:GPSVersionID="2.2.0.0"
+   exif:ExifVersion="0231"
+   exif:SensitivityType="2"
+   exif:RecommendedExposureIndex="100"
+   exif:CustomRendered="0"
+   exif:ExposureMode="1"
+   exif:WhiteBalance="0"
+   exif:SceneCaptureType="0"
+   exif:FocalPlaneXResolution="102732108/32768"
+   exif:FocalPlaneYResolution="102732108/32768"
+   exif:FocalPlaneResolutionUnit="3"
+   exif:GPSAltitudeRef=""
+   exif:GPSTimeStamp=""
+   exif:GPSStatus=""
+   exif:GPSMapDatum=""
+   exif:GPSDestBearingRef=""
+   exif:PixelXDimension="6960"
+   exif:PixelYDimension="4640"
+   aux:ApproximateFocusDistance="504/100"
+   aux:Lens="18-50mm F2.8 DC DN | Contemporary 021"
+   aux:SerialNumber="182034003480"
+   aux:LensInfo="18/1 50/1 0/0 0/0"
+   aux:LensID="4464"
+   aux:LensSerialNumber="0000000000"
+   aux:ImageNumber="0"
+   aux:FlashCompensation="0/1"
+   aux:Firmware="1.3.1"
+   photoshop:DateCreated="2025-06-29T14:07:58.24-04:00"
+   photoshop:Country="United States"
+   photoshop:State="Massachusetts"
+   photoshop:City="Lancaster"
+   photoshop:SidecarForExtension="CR3"
+   photoshop:EmbeddedXMPDigest="120B7B9CF9D08EF4F483A77E5B485EA7"
+   dc:format="image/x-canon-cr3"
+   xmpMM:InstanceID="xmp.iid:6a34e601-7c4f-4b32-8462-76d26133b51a"
+   xmpMM:DocumentID="xmp.did:3de47ba5-4e68-4636-b712-d343e9991544"
+   xmpMM:OriginalDocumentID="xmp.did:3de47ba5-4e68-4636-b712-d343e9991544"
+   crd:CameraProfile="Camera Standard"
+   crd:LookName=""
+   xmpDM:good="True"
    crs:Version="17.5"
    crs:ProcessVersion="15.4"
    crs:WhiteBalance="As Shot"
@@ -137,59 +198,34 @@
    crs:CropConstrainToUnitSquare="1"
    crs:HasCrop="True"
    crs:AlreadyApplied="False"
-   crs:RawFileName="9O0A1735.CR3"
-   mwg-rs:Regions="nil"
-   tiff:Orientation="1"
-   tiff:Make="Canon"
-   tiff:Model="Canon EOS R7"
-   exif:ApertureValue="2970854/1000000"
-   exif:ExposureBiasValue="0/1"
-   exif:FNumber="28/10"
-   exif:ExposureTime="1/1000"
-   exif:MaxApertureValue="3/1"
-   exif:ShutterSpeedValue="9965784/1000000"
-   exif:DateTimeOriginal="2025-06-29T14:07:58.24-04:00"
-   exif:ExposureProgram="1"
-   exif:FocalLength="31/1"
-   exif:MeteringMode="5"
-   exif:GPSLatitude="42,30.8643N"
-   exif:GPSLongitude="71,41.6112W"
-   exif:GPSAltitude="553/5"
-   exif:GPSVersionID="2.2.0.0"
-   exif:ExifVersion="0231"
-   exif:SensitivityType="2"
-   exif:RecommendedExposureIndex="100"
-   exif:CustomRendered="0"
-   exif:ExposureMode="1"
-   exif:WhiteBalance="0"
-   exif:SceneCaptureType="0"
-   exif:FocalPlaneXResolution="102732108/32768"
-   exif:FocalPlaneYResolution="102732108/32768"
-   exif:FocalPlaneResolutionUnit="3"
-   exif:GPSAltitudeRef=""
-   exif:GPSTimeStamp=""
-   exif:GPSStatus=""
-   exif:GPSMapDatum=""
-   exif:GPSDestBearingRef=""
-   aux:ApproximateFocusDistance="504/100"
-   aux:Lens="18-50mm F2.8 DC DN | Contemporary 021"
-   aux:SerialNumber="182034003480"
-   aux:LensInfo="18/1 50/1 0/0 0/0"
-   aux:LensID="4464"
-   aux:LensSerialNumber="0000000000"
-   aux:ImageNumber="0"
-   aux:FlashCompensation="0/1"
-   aux:Firmware="1.3.1"
-   photoshop:DateCreated="2025-06-29T14:07:58.24-04:00"
-   photoshop:Country="United States"
-   photoshop:State="Massachusetts"
-   photoshop:City="Lancaster"
-   photoshop:SidecarForExtension="CR3"
-   photoshop:EmbeddedXMPDigest="120B7B9CF9D08EF4F483A77E5B485EA7"
-   dc:format="image/x-canon-cr3"
-   xmpMM:InstanceID="xmp.iid:3de47ba5-4e68-4636-b712-d343e9991544"
-   xmpMM:DocumentID="xmp.did:3de47ba5-4e68-4636-b712-d343e9991544"
-   xmpMM:OriginalDocumentID="xmp.did:3de47ba5-4e68-4636-b712-d343e9991544">
+   crs:RawFileName="9O0A1735.CR3">
+   <exif:ISOSpeedRatings>
+    <rdf:Seq>
+     <rdf:li>100</rdf:li>
+    </rdf:Seq>
+   </exif:ISOSpeedRatings>
+   <exif:Flash
+    exif:Fired="False"
+    exif:Return="0"
+    exif:Mode="0"
+    exif:Function="False"
+    exif:RedEyeMode="False"/>
+   <xmpMM:History>
+    <rdf:Seq>
+     <rdf:li
+      stEvt:action="saved"
+      stEvt:instanceID="xmp.iid:3de47ba5-4e68-4636-b712-d343e9991544"
+      stEvt:when="2025-09-18T23:07:45-04:00"
+      stEvt:softwareAgent="Adobe Lightroom 8.5.1 (Macintosh)"
+      stEvt:changed="/metadata"/>
+     <rdf:li
+      stEvt:action="saved"
+      stEvt:instanceID="xmp.iid:6a34e601-7c4f-4b32-8462-76d26133b51a"
+      stEvt:when="2025-09-19T19:46-04:00"
+      stEvt:softwareAgent="Adobe Lightroom 8.5.1 (Macintosh)"
+      stEvt:changed="/metadata"/>
+    </rdf:Seq>
+   </xmpMM:History>
    <crs:ToneCurvePV2012>
     <rdf:Seq>
      <rdf:li>0, 0</rdf:li>
@@ -219,27 +255,6 @@
      <rdf:li>-1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000</rdf:li>
     </rdf:Seq>
    </crs:PointColors>
-   <exif:ISOSpeedRatings>
-    <rdf:Seq>
-     <rdf:li>100</rdf:li>
-    </rdf:Seq>
-   </exif:ISOSpeedRatings>
-   <exif:Flash
-    exif:Fired="False"
-    exif:Return="0"
-    exif:Mode="0"
-    exif:Function="False"
-    exif:RedEyeMode="False"/>
-   <xmpMM:History>
-    <rdf:Seq>
-     <rdf:li
-      stEvt:action="saved"
-      stEvt:instanceID="xmp.iid:3de47ba5-4e68-4636-b712-d343e9991544"
-      stEvt:when="2025-09-18T23:07:45-04:00"
-      stEvt:softwareAgent="Adobe Lightroom 8.5.1 (Macintosh)"
-      stEvt:changed="/metadata"/>
-    </rdf:Seq>
-   </xmpMM:History>
   </rdf:Description>
  </rdf:RDF>
 </x:xmpmeta>
