@@ -12,46 +12,42 @@ class TestCropCalculator(unittest.TestCase):
             {
                 "name": "no_rotation_origin",
                 "cropRect": [[0, 0], [10, 10]],
+                "width": 10,
+                "height": 10,
                 "rotation_degrees": 0,
-                "expected_crs": {
-                    "left": 0.0,
-                    "top": 10.0,
-                    "right": 10.0,
-                    "bottom": 0.0
-                }
+                "expected_crs": { "left": 0.0, "top": 0.0, "right": 1.0, "bottom": 1.0 }
             },
             {
                 "name": "no_rotation_offset",
                 "cropRect": [[5, 5], [10, 10]],
+                "width": 20,
+                "height": 20,
                 "rotation_degrees": 0,
-                "expected_crs": {
-                    "left": 5.0,
-                    "top": 15.0,
-                    "right": 15.0,
-                    "bottom": 5.0
-                }
+                "expected_crs": { "left": 0.25, "top": 0.25, "right": 0.75, "bottom": 0.75 }
             },
             {
-                "name": "90_degree_rotation",
+                "name": "45_degree_rotation",
                 "cropRect": [[0, 0], [10, 10]],
-                "rotation_degrees": 90,
-                "expected_crs": {
-                    "left": -10.0,
-                    "top": 5.0,
-                    "right": 0.0,
-                    "bottom": -5.0
-                }
+                "width": 10,
+                "height": 10,
+                "rotation_degrees": 45,
+                "expected_crs": { "left": 0.5, "top": 0.5 *(1 - math.sqrt(2)), "right": 0.5, "bottom": 0.5 * (1 + math.sqrt(2)) }
             },
+            # {
+            #     "name": "9O0A1667",
+            #     "cropRect": [[527.9708682405662,131.51999177562675],[6248,4165.333333333332]],
+            #     "width": 6960,
+            #     "height": 4640,
+            #     "rotation_degrees": -2.22,
+            #     "expected_crs": { "top": 0.122243, "left": 0.089471, "bottom": 0.944856, "right": 0.985442 }
+            # },
             {
-                "name": "180_degree_rotation",
-                "cropRect": [[1, 1], [2, 2]],
-                "rotation_degrees": 180,
-                "expected_crs": {
-                    "left": -3.0,
-                    "top": -1.0,
-                    "right": -1.0,
-                    "bottom": -3.0
-                }
+                "name": "9O0A1670",
+                "width": 6960,
+                "height": 4640,
+                "cropRect": [[842.6005306871207,583.562899233074],[5876.999999999999,3918]],
+                "rotation_degrees": -2.744139,
+                "expected_crs": { "top": 0.060646, "left": 0.108317, "bottom": 0.843514, "right": 0.978784 }
             }
         ]
     
@@ -72,13 +68,13 @@ class TestCropCalculator(unittest.TestCase):
     
     def test_rotate_point_90_degrees(self):
         # Test rotation by 90 degrees around origin
-        rotated = self.calc.rotate_point((1, 0), (0, 0), 90)
+        rotated = self.calc.rotate_point((1, 0), (0, 0), math.pi/2)
         self.assertAlmostEqual(rotated[0], 0.0, places=7)
         self.assertAlmostEqual(rotated[1], 1.0, places=7)
     
     def test_rotate_point_180_degrees(self):
         # Test rotation by 180 degrees
-        rotated = self.calc.rotate_point((1, 1), (0, 0), 180)
+        rotated = self.calc.rotate_point((1, 1), (0, 0), math.pi)
         self.assertAlmostEqual(rotated[0], -1.0, places=7)
         self.assertAlmostEqual(rotated[1], -1.0, places=7)
     
@@ -90,10 +86,12 @@ class TestCropCalculator(unittest.TestCase):
                 crop_rect = (tuple(fixture["cropRect"][0]), tuple(fixture["cropRect"][1]))
                 rotation_degrees = fixture["rotation_degrees"]
                 expected_crs = fixture["expected_crs"]
+                width = fixture.get("width", 1)
+                height = fixture.get("height", 1)
                 
                 # Calculate CRS coordinates
-                actual_crs = self.calc.crs_coords(crop_rect, rotation_degrees)
-                
+                actual_crs = self.calc.crs_coords(crop_rect, rotation_degrees, orig_width=width, orig_height=height)
+
                 # Assert each coordinate matches expected values
                 self.assertAlmostEqual(actual_crs["left"], expected_crs["left"], places=7,
                                      msg=f"Left coordinate mismatch in {fixture['name']}")
