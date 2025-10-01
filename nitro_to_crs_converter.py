@@ -46,18 +46,15 @@ class NitroToCRSConverter:
                 'x': 'adobe:ns:meta/'
             }
             
-            # Find the nitro:EditModel element
-            edit_model_elem = root.find('.//nitro:EditModel', namespaces)
-            
-            if edit_model_elem is None:
+            # Find the Description element that contains the nitro:EditModel
+            description = root.find('.//rdf:Description[@nitro:EditModel]', namespaces)
+            encoded_plist = description.get('{http://com.gentlemencoders/xmp/nitro/1.0/}EditModel')
+
+            if encoded_plist is None:
                 return None  # No nitro edit model found
-            
-            # Get the encoded plist content
-            encoded_plist = edit_model_elem.text
-            
-            if not encoded_plist:
-                return None
-            
+            else:
+                print(f"Found nitro edit model in {xmp_file_path}")
+                                    
             # Decode HTML entities
             decoded_plist = html.unescape(encoded_plist)
             
