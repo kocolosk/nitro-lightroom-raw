@@ -231,17 +231,20 @@ class TestCropRect:
 
     
     @pytest.mark.parametrize("crop_test_case", [
-        "known_crop_test_case_1", "known_crop_test_case_rotated"
+        "basic", "9O0A0700", "9O0A0824", "9O0A1667", "9O0A1670"
     ], indirect=True)
-    def test_with_fixture_example(self, crop_test_case):
+    def test_with_fixture_example(self, crop_test_case, tolerance):
         """Example of using a fixture for specific test cases."""
-        test_case = crop_test_case
-        crop_rect = CropRect(test_case['cropRect'], test_case['rotation'], test_case['orig_width'], test_case['orig_height'])
+        crop_rect = CropRect(
+            crop_test_case.get('cropRect', [[0, 0], [0, 0]]),
+            crop_test_case.get('rotation', 0.0),
+            crop_test_case.get('orig_width', 6960),
+            crop_test_case.get('orig_height', 4640)
+        )
+
         factors = crop_rect.crop_factors()
-        
-        tolerance = 1e-10
-        expected = test_case['expected']
-        
+
+        expected = crop_test_case['expected']
         for key, expected_value in expected.items():
             if isinstance(expected_value, float):
                 assert abs(factors[key] - expected_value) < tolerance, f"Failed for {key}: got {factors[key]}, expected {expected_value}"
