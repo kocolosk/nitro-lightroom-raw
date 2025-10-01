@@ -25,8 +25,8 @@ class CropRect:
     def center(self) -> Point:
         """Calculate the center point of the crop rectangle."""
         return Point(self.origin.x + 0.5 * self.width, self.origin.y + 0.5 * self.height)
-    
-    def _rotate_corners(self, theta: float) -> (Point, Point):
+
+    def _rotate_corners(self, theta: float) -> tuple[Point, Point]:
         """Rotate the top-left and bottom-right corners around the center by angle theta (radians)."""
         center = self.center()
         top_left = Point(self.origin.x, self.origin.y + self.height).rotate(center, theta)
