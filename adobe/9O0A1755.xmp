@@ -131,7 +131,7 @@
    crs:CropBottom="0.942672"
    crs:CropRight="0.755747"
    crs:CropAngle="0"
-   crs:CropConstrainToWarp="False"
+   crs:CropConstrainToWarp="0"
    crs:CropConstrainToUnitSquare="1"
    crs:HasCrop="True"
    crs:AlreadyApplied="False"

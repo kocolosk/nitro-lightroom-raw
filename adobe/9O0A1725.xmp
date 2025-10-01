@@ -133,7 +133,7 @@
    crs:CropBottom="0.771700"
    crs:CropRight="0.872717"
    crs:CropAngle="0"
-   crs:CropConstrainToWarp="False"
+   crs:CropConstrainToWarp="0"
    crs:CropConstrainToUnitSquare="1"
    crs:HasCrop="True"
    crs:AlreadyApplied="False"

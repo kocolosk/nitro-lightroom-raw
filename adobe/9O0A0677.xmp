@@ -190,7 +190,8 @@
    crs:CropBottom="1.000000"
    crs:CropAngle="0"
    crs:HasCrop="True"
-   crs:CropConstrainToWarp="False"
+   crs:CropConstrainToWarp="0"
+   crs:CropConstrainToUnitSquare="1"
    crs:RawFileName="9O0A0677.CR3">
    <exif:ISOSpeedRatings>
     <rdf:Seq>
