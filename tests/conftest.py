@@ -43,7 +43,7 @@ def standard_image_dimensions():
 def known_crop_test_case_1():
     """Test case with known expected CRS values."""
     return {
-        'input': [[25, 25], [50, 50]],  # JSON array for CropRect
+        'cropRect': [[25, 25], [50, 50]],  # JSON array for CropRect
         'rotation': 0.0,
         'orig_width': 100,
         'orig_height': 100,
@@ -61,7 +61,7 @@ def known_crop_test_case_1():
 def known_crop_test_case_rotated():
     """Test case with rotation and known expected values."""
     return {
-        'input': [[0, 0], [50, 50]],
+        'cropRect': [[0, 0], [50, 50]],
         'rotation': 45.0,
         'orig_width': 100,
         'orig_height': 100,
@@ -72,3 +72,37 @@ def known_crop_test_case_rotated():
             # Add other expected values as you determine them
         }
     }
+
+@pytest.fixture
+def crop_test_case(request):
+    """Generic fixture to provide a crop test case by name."""
+    test_cases = {
+        "known_crop_test_case_1": {
+            'cropRect': [[25, 25], [50, 50]],  # JSON array for CropRect
+            'rotation': 0.0,
+            'orig_width': 100,
+            'orig_height': 100,
+            'expected': {
+                'crs:CropLeft': 0.25,
+                'crs:CropTop': 0.25,
+                'crs:CropRight': 0.75,
+                'crs:CropBottom': 0.75,
+                'crs:CropAngle': 0.0,
+                'crs:HasCrop': True
+            }
+        },
+        "known_crop_test_case_rotated": {
+            'cropRect': [[0, 0], [50, 50]],
+            'rotation': 45.0,
+            'orig_width': 100,
+            'orig_height': 100,
+            'expected': {
+                # You would calculate and fill in the expected values here
+                'crs:CropAngle': 45.0,
+                'crs:HasCrop': True
+                # Add other expected values as you determine them
+            }
+        }
+    }
+    return test_cases.get(request.param, None)
+

@@ -16,12 +16,15 @@ class Point:
         return Point(center.x + rx, center.y + ry)
     
 class CropRect:    
-    def __init__(self, json_array):
+    def __init__(self, json_array, rotation_degrees=0.0, orig_width=6960, orig_height=4640):
         (x1, y1), (w, h) = json_array
         self.origin = Point(x1, y1)
-        self.width = w
-        self.height = h
-    
+        self.width = orig_width if w == 0 else w
+        self.height = orig_height if h == 0 else h
+        self.rotation_degrees = rotation_degrees
+        self.orig_width = orig_width
+        self.orig_height = orig_height
+
     def center(self) -> Point:
         """Calculate the center point of the crop rectangle."""
         return Point(self.origin.x + 0.5 * self.width, self.origin.y + 0.5 * self.height)
@@ -62,26 +65,23 @@ class CropRect:
         dy = poi.y - center.y
         return Point(center.x + dx / scale_factor, center.y + dy / scale_factor)
     
-    def crop_factors(self, rotation_degrees: float, orig_width=None, orig_height=None) -> dict:
+    def crop_factors(self) -> dict:
         """Calculate the crop factors (left, top, right, bottom) after rotation."""
-        width = orig_width if orig_width is not None else self.width
-        height = orig_height if orig_height is not None else self.height
-
-        theta = math.radians(-1.0 * rotation_degrees)
+        theta = math.radians(-1.0 * self.rotation_degrees)
         top_left_rotated, bottom_right_rotated = self._rotate_corners(theta)
 
         # Now scale if necessary to fit within original dimensions
-        scale_factor = self._scale_factor(theta, width, height)
+        scale_factor = self._scale_factor(theta, self.orig_width, self.orig_height)
         top_left_final = self._scale_point(top_left_rotated, scale_factor)
         bottom_right_final = self._scale_point(bottom_right_rotated, scale_factor)
 
         # CRS crop factors are normalized to [0,1] with origin at top-left
         return {
-            "crs:CropLeft": top_left_final.x / width,
-            "crs:CropTop": 1 - top_left_final.y / height,
-            "crs:CropRight": bottom_right_final.x / width,
-            "crs:CropBottom": 1 - bottom_right_final.y / height,
-            "crs:CropAngle": rotation_degrees,
+            "crs:CropLeft": top_left_final.x / self.orig_width,
+            "crs:CropTop": 1 - top_left_final.y / self.orig_height,
+            "crs:CropRight": bottom_right_final.x / self.orig_width,
+            "crs:CropBottom": 1 - bottom_right_final.y / self.orig_height,
+            "crs:CropAngle": self.rotation_degrees,
             "crs:CropConstrainToWarp": 0,
             "crs:CropConstrainToUnitSquare": 1,
             "crs:HasCrop": True

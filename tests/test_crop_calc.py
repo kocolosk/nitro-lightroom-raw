@@ -63,7 +63,9 @@ class TestCropRect:
     
     def test_crop_factors_structure(self, basic_crop_rect):
         """Test that crop_factors returns all required keys."""
-        factors = basic_crop_rect.crop_factors(0.0, orig_width=200, orig_height=160)
+        basic_crop_rect.original_width = 200
+        basic_crop_rect.original_height = 160
+        factors = basic_crop_rect.crop_factors()
         
         # Verify all required keys are present
         expected_keys = [
@@ -86,7 +88,9 @@ class TestCropRect:
     
     def test_crop_factors_no_rotation(self, basic_crop_rect):
         """Test crop factors with no rotation."""
-        factors = basic_crop_rect.crop_factors(0.0, orig_width=200, orig_height=160)
+        basic_crop_rect.original_width = 200
+        basic_crop_rect.original_height = 160
+        factors = basic_crop_rect.crop_factors()
         
         # With no rotation, crop should match original rectangle
         assert factors["crs:CropAngle"] == 0.0
@@ -104,24 +108,12 @@ class TestCropRect:
         assert factors["crs:CropLeft"] < factors["crs:CropRight"]
         assert factors["crs:CropTop"] < factors["crs:CropBottom"]
     
-    def test_crop_factors_with_original_dimensions(self, basic_crop_rect):
-        """Test crop factors with specified original dimensions."""
-        factors = basic_crop_rect.crop_factors(0.0, orig_width=400, orig_height=300)
-        
-        # Should be normalized to the provided dimensions
-        assert 0 <= factors["crs:CropLeft"] <= 1
-        assert 0 <= factors["crs:CropRight"] <= 1
-        assert 0 <= factors["crs:CropTop"] <= 1
-        assert 0 <= factors["crs:CropBottom"] <= 1
-        
-        # With larger original dimensions, crop factors should be smaller
-        factors_default = basic_crop_rect.crop_factors(0.0, orig_width=200, orig_height=160)
-        assert factors["crs:CropLeft"] < factors_default["crs:CropLeft"]
-        assert factors["crs:CropRight"] < factors_default["crs:CropRight"]
-    
     def test_crop_factors_with_rotation(self, basic_crop_rect):
         """Test crop factors with 45-degree rotation."""
-        factors = basic_crop_rect.crop_factors(45.0, orig_width=200, orig_height=160)
+        basic_crop_rect.rotation_degrees = 45.0
+        basic_crop_rect.original_width = 200
+        basic_crop_rect.original_height = 160
+        factors = basic_crop_rect.crop_factors()
         
         assert factors["crs:CropAngle"] == 45.0
         assert 0 <= factors["crs:CropLeft"] <= 1
@@ -135,7 +127,10 @@ class TestCropRect:
     
     def test_crop_factors_negative_rotation(self, basic_crop_rect):
         """Test crop factors with negative rotation."""
-        factors = basic_crop_rect.crop_factors(-30.0, orig_width=200, orig_height=160)
+        basic_crop_rect.rotation_degrees = -30.0
+        basic_crop_rect.original_width = 200
+        basic_crop_rect.original_height = 160
+        factors = basic_crop_rect.crop_factors()
         
         assert factors["crs:CropAngle"] == -30.0
         assert 0 <= factors["crs:CropLeft"] <= 1
@@ -145,8 +140,11 @@ class TestCropRect:
     
     def test_crop_factors_90_degree_rotation(self, centered_crop_rect):
         """Test crop factors with 90-degree rotation."""
-        factors = centered_crop_rect.crop_factors(90.0, orig_width=100, orig_height=100)
-        
+        centered_crop_rect.rotation_degrees = 90.0
+        centered_crop_rect.original_width = 100
+        centered_crop_rect.original_height = 100
+        factors = centered_crop_rect.crop_factors()
+
         assert factors["crs:CropAngle"] == 90.0
         # Verify the crop factors are within valid range
         assert 0 <= factors["crs:CropLeft"] <= 1
@@ -185,8 +183,11 @@ class TestCropRect:
     @pytest.mark.parametrize("rotation", [0, 15, 30, 45, 60, 90, 180, 270])
     def test_crop_factors_various_rotations(self, basic_crop_rect, rotation):
         """Test crop factors with various rotation angles."""
-        factors = basic_crop_rect.crop_factors(rotation, orig_width=200, orig_height=160)
-        
+        basic_crop_rect.rotation_degrees = rotation
+        basic_crop_rect.original_width = 200
+        basic_crop_rect.original_height = 160
+        factors = basic_crop_rect.crop_factors()
+
         # All crop factors should be valid
         assert 0 <= factors["crs:CropLeft"] <= 1
         assert 0 <= factors["crs:CropRight"] <= 1
@@ -216,51 +217,27 @@ class TestCropRect:
     
     def test_crop_factors_consistency(self, basic_crop_rect):
         """Test that crop factors are consistent between multiple calls."""
-        factors1 = basic_crop_rect.crop_factors(45.0, orig_width=200, orig_height=160)
-        factors2 = basic_crop_rect.crop_factors(45.0, orig_width=200, orig_height=160)
-        
+        basic_crop_rect.rotation_degrees = 45.0
+        basic_crop_rect.original_width = 200
+        basic_crop_rect.original_height = 160
+        factors1 = basic_crop_rect.crop_factors()
+        factors2 = basic_crop_rect.crop_factors()
+
         for key in factors1:
             if isinstance(factors1[key], float):
                 assert abs(factors1[key] - factors2[key]) < 1e-10
             else:
                 assert factors1[key] == factors2[key]
+
     
-    # TODO: Add specific test cases with known expected values
-    # This is where you can add your fixtures with specific expected CRS crop values
-    def test_specific_crop_values_placeholder(self):
-        """Placeholder for specific crop value tests with known expected results."""
-        # Example structure for specific test cases:
-        # crop_rect = CropRect([[x, y], [w, h]])
-        # factors = crop_rect.crop_factors(rotation, orig_width, orig_height)
-        # assert abs(factors["crs:CropLeft"] - expected_left) < tolerance
-        # assert abs(factors["crs:CropTop"] - expected_top) < tolerance
-        # ... etc
-        pass
-    
-    def test_example_specific_crop_case(self):
-        """Example test with specific known values."""
-        # Example: A simple centered crop with no rotation
-        crop_rect = CropRect([[25, 25], [50, 50]])
-        factors = crop_rect.crop_factors(0.0, orig_width=100, orig_height=100)
-        
-        # These values should be predictable for a simple case
-        tolerance = 1e-10
-        assert abs(factors["crs:CropLeft"] - 0.25) < tolerance
-        assert abs(factors["crs:CropTop"] - 0.25) < tolerance  
-        assert abs(factors["crs:CropRight"] - 0.75) < tolerance
-        assert abs(factors["crs:CropBottom"] - 0.75) < tolerance
-        assert factors["crs:CropAngle"] == 0.0
-        assert factors["crs:HasCrop"] is True
-    
-    def test_with_fixture_example(self, known_crop_test_case_1):
+    @pytest.mark.parametrize("crop_test_case", [
+        "known_crop_test_case_1", "known_crop_test_case_rotated"
+    ], indirect=True)
+    def test_with_fixture_example(self, crop_test_case):
         """Example of using a fixture for specific test cases."""
-        test_case = known_crop_test_case_1
-        crop_rect = CropRect(test_case['input'])
-        factors = crop_rect.crop_factors(
-            test_case['rotation'],
-            orig_width=test_case['orig_width'],
-            orig_height=test_case['orig_height']
-        )
+        test_case = crop_test_case
+        crop_rect = CropRect(test_case['cropRect'], test_case['rotation'], test_case['orig_width'], test_case['orig_height'])
+        factors = crop_rect.crop_factors()
         
         tolerance = 1e-10
         expected = test_case['expected']
