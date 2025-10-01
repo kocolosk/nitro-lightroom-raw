@@ -22,6 +22,7 @@ class NitroToCRSConverter:
         # Verbose debug logging can be enabled via ctor or env var
         env_dbg = os.environ.get("NITRO_DEBUG_CROP") or os.environ.get("NITRO_DEBUG")
         self.debug = bool(debug) if debug is not None else bool(env_dbg)
+        self.orientation = 1  # Default orientation
         
     def extract_plist_from_xmp(self, xmp_file_path):
         """
@@ -147,6 +148,20 @@ class NitroToCRSConverter:
             print(f"Error converting crop data: {e}")
             return {}
 
+    def maybe_rotate_crop(self, crs_crop_data):
+        if self.orientation == 8:
+            print(f"Rotating crop for portrait orientation {self.orientation}")
+            cl = crs_crop_data.get('crs:CropLeft', 0.0)
+            ct = crs_crop_data.get('crs:CropTop', 0.0)
+            cr = crs_crop_data.get('crs:CropRight', 1.0)
+            cb = crs_crop_data.get('crs:CropBottom', 1.0)
+
+            crs_crop_data['crs:CropLeft'] = 1.0 - cb
+            crs_crop_data['crs:CropTop'] = cl
+            crs_crop_data['crs:CropRight'] = 1.0 - ct
+            crs_crop_data['crs:CropBottom'] = cr
+        return crs_crop_data
+
     def update_adobe_xmp(self, adobe_xmp_path, crs_crop_data):
         """
         Update an existing Adobe XMP file with CRS crop settings.
@@ -240,6 +255,10 @@ class NitroToCRSConverter:
                 print(f"Invalid originalImagePixelSize format: {original_size}")
                 return False
             
+            # Look for a portrait orientation
+            if 'editModel' in plist_data and 'defaultOrientation' in plist_data['editModel']:
+                self.orientation = plist_data['editModel']['defaultOrientation']
+            
             # Look for crop data
             crs_crop_data = {}
             if 'editModel' in plist_data and 'versions' in plist_data['editModel']:
@@ -255,6 +274,8 @@ class NitroToCRSConverter:
             if not crs_crop_data:
                 print(f"No crop data found in {nitro_path}")
                 return False
+            
+            self.maybe_rotate_crop(crs_crop_data)
             
             # Check if Adobe XMP file exists
             if not os.path.exists(adobe_path):
