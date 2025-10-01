@@ -13,6 +13,7 @@ import math
 
 from pathlib import Path
 from datetime import datetime
+from crop_calc import CropRect, Point
 
 
 class NitroToCRSConverter:
@@ -93,141 +94,6 @@ class NitroToCRSConverter:
         except (ValueError, IndexError):
             return None
 
-    def compute_lightroom_crop(self, width_px: int, height_px: int, rotation_deg: float):
-        """
-        Compute crs:CropLeft and crs:CropTop (normalized 0..1) for a rotation-only auto-crop
-        that preserves the original aspect ratio and maximizes area, matching Lightroom.
-
-        Args:
-            width_px:  original image width in pixels (W)
-            height_px: original image height in pixels (H)
-            rotation_deg: rotation angle in degrees (Lightroom/CRS: positive=counter-clockwise)
-
-        Returns:
-            (crop_left, crop_top) as floats in [0, 0.5]
-        """
-        W = float(width_px)
-        H = float(height_px)
-        if W <= 0 or H <= 0:
-            return 0.0, 0.0
-
-        theta = abs(math.radians(rotation_deg))
-        if theta < 1e-9:
-            return 0.0, 0.0
-
-        c = math.cos(theta)
-        s = math.sin(theta)
-
-        # Scale of the maximal inscribed rectangle (same aspect as original) in the rotated frame
-        # t is chosen by the limiting axis (min of the two).
-        t_w = W / (W * c + H * s)
-        t_h = H / (W * s + H * c)
-        t = min(t_w, t_h)
-
-        # Choose CropLeft so that the back-rotated crop AABB width matches the original width.
-        # This makes the horizontal AABB constraint tight.
-        L_px = 0.5 * (W - t * (W * c + H * s))
-        if L_px < 0:
-            L_px = 0.0
-
-        # Solve CropTop so that the rotated crop height equals the target rotated height (t * H).
-        # (W - 2L)*s + (H - 2T)*c = t * H  ->  solve for T.
-        target_H_rot = t * H
-        A = W - 2.0 * L_px
-        T_px = 0.5 * (H - (target_H_rot - A * s) / max(c, 1e-12))
-        if T_px < 0:
-            T_px = 0.0
-
-        crop_left = min(max(L_px / W, 0.0), 0.5)
-        crop_top = min(max(T_px / H, 0.0), 0.5)
-        return (crop_left, crop_top, 1.0 - crop_left, 1.0 - crop_top)
-
-    def compute_lightroom_crop_unit_square(self, width_px: int, height_px: int, rotation_deg: float):
-        """
-        Compute CropLeft/Top/Right/Bottom assuming Lightroom's UnitSquare normalization.
-        Strategy:
-        - Normalize original W×H to unit square (scale by 1/W horizontally and 1/H vertically).
-        - Rotate by |theta| about center.
-        - Define crop in the rotated AABB space. Lightroom examples indicate:
-          * For positive rotation, Top often snaps to 0; we solve for Left to preserve original AR.
-          * For negative rotation, solution tends to be centered; we solve symmetrically.
-        - Use a 1D bisection to match target aspect W/H when back-projected to pixel space with
-          Lightroom-like uniform fit scaling.
-        Returns normalized [0..1] margins in the unit-square AABB coordinates.
-        """
-        W = float(width_px)
-        H = float(height_px)
-        if W <= 0 or H <= 0:
-            return 0.0, 0.0, 1.0, 1.0
-
-        sign = 1.0 if rotation_deg >= 0 else -1.0
-        theta = abs(math.radians(rotation_deg))
-        if theta < 1e-12:
-            return 0.0, 0.0, 1.0, 1.0
-
-        # Basic trig and aspect ratios
-        c = math.cos(theta)
-        s = math.sin(theta)
-        r = W / H
-        k = 1.0 / r  # H/W
-        d = max(1e-12, c * c - s * s)  # cos(2*theta)
-
-        # Lightroom-like: apply a uniform scale to "fit height" of the rotated full image
-        # s_fh shrinks the rotated height back to the original height.
-        s_fh = 1.0 / (c + r * s)
-
-        if self.debug:
-            print(
-                f"[unit-square] W={W} H={H} r={r:.6f} k={k:.6f} deg={rotation_deg:.6f} (|θ|={math.degrees(theta):.6f})\n"
-                f"  c={c:.9f} s={s:.9f} cos2θ(d)={d:.9f} s_fh={s_fh:.9f}"
-            )
-
-        # Branch by sign to emulate observed Lightroom choices
-        if sign >= 0:
-            # Positive rotation: Lightroom commonly keeps vertical span [0,1] (Top=0, Bottom=1)
-            # Solve minimal symmetric horizontal margin x so that horizontal constraint holds
-            # after the fit-to-height scale: (1 - 2x) * c + (1 - 2*0) * k*s = s_fh
-            # => x = (1 - (s_fh - k*s)/c) / 2
-            x = (1.0 - ((s_fh - k * s) / max(c, 1e-12))) * 0.5
-            x = min(max(x, 0.0), 0.5)
-            l, t, rgt, btm = x, 0.0, 1.0 - x, 1.0
-
-            if self.debug:
-                # Quick derived diagnostics
-                print(
-                    f"  [+] Top=0, Bottom=1, Left={l:.6f}, Right={rgt:.6f}"
-                )
-            return (l, t, rgt, btm)
-
-        # Negative rotation: we solve both constraints in a coupled way for (x,y)
-        # using a linear system on u=(1-2x), v=(1-2y):
-        #   c*u + k*s*v = s_fh
-        #   r*s*u + c*v = s_fh
-        # which yields v = s_fh*(c - r*s)/d, then u = (s_fh - k*s*v)/c.
-        v = s_fh * (c - r * s) / d
-        y = (1.0 - v) * 0.5
-        # Horizontal u from the same system (gives a slightly larger x than LR seems to use)
-        u = (s_fh - k * s * v) / max(c, 1e-12)
-        x_sys = (1.0 - u) * 0.5
-
-        # Empirical nudge: LR often crops less horizontally for negative angles.
-        # We damp horizontal margin using aspect factor k^3, clamped by the system solution.
-        x_nudged = max(0.0, min(x_sys, (k ** 3) * y))
-
-        # Clamp into [0, 0.5]
-        x = min(max(x_nudged, 0.0), 0.5)
-        y = min(max(y, 0.0), 0.5)
-
-        l, t, rgt, btm = x, y, 1.0 - x, 1.0 - y
-
-        if self.debug:
-            print(
-                f"  [-] System: u={u:.6f} v={v:.6f} -> x_sys={(1.0 - u)*0.5:.6f}, y={y:.6f}\n"
-                f"      Nudged x={x:.6f} (k^3*y={((k**3)*y):.6f}), Crop=({l:.6f},{t:.6f},{rgt:.6f},{btm:.6f})"
-            )
-
-        return (l, t, rgt, btm)
-
     def nitro_crop_to_crs(self, crop_data, original_width, original_height):
         """
         Convert Nitro's crop data to Adobe CRS format.
@@ -262,63 +128,21 @@ class NitroToCRSConverter:
             crop_rect = crop_json.get('cropRect')
             if not crop_rect or len(crop_rect) != 2:
                 return {}
-            
-            # Get corner coordinates
-            x1, y1 = crop_rect[0]  # lower-left
-            w, h = crop_rect[1]
 
             # Get rotation/straighten angle
             straighten = crop_json.get('numeric', {}).get('straighten', 0)
 
-            # Special case: if all crop values are zero, this is a rotation-only edit
+            # Get corner coordinates and desired edited size (Nitro semantics: lower-left, final width/height)
+            x1, y1 = crop_rect[0]  # lower-left in pixels (Nitro uses bottom-left origin)
+            w, h = crop_rect[1]    # final edited pixel width/height of the image after rotation
+
             if x1 == 0 and y1 == 0 and w == 0 and h == 0:
-                # Calculate optimal crop to preserve aspect ratio during rotation
-                # Use UnitSquare-aware solver to match Lightroom behavior
-                crop_left, crop_top, crop_right, crop_bottom = self.compute_lightroom_crop_unit_square(
-                    original_width, original_height, straighten
-                )
-                
-                crs_crop = {
-                    'crs:CropAngle': straighten,
-                    'crs:HasCrop': True,  # Set to True since we're applying a computed crop
-                    'crs:CropConstrainToWarp': 0,
-                    'crs:CropConstrainToUnitSquare': 1,
-                    'crs:CropLeft': crop_left,
-                    'crs:CropTop': crop_top,
-                    'crs:CropRight': crop_right,
-                    'crs:CropBottom': crop_bottom,
-                }
-                print(f"  Rotation-only (angle={straighten}°), computed optimal crop: [{crop_left:.4f}, {crop_top:.4f}, {crop_right:.4f}, {crop_bottom:.4f}]")
-            else:            
-                # Convert to normalized coordinates (0-1)
-                # Note: Nitro uses bottom-left origin, Adobe uses top-left
-                # So we need to flip the Y coordinates
-                crop_left = x1 / original_width
-                crop_right = (x1 + w) / original_width
-                crop_top = (original_height - (y1 + h)) / original_height
-                crop_bottom = (original_height - y1) / original_height
-                
-                
-                # Build CRS properties
-                crs_crop = {
-                    'crs:CropLeft': crop_left,
-                    'crs:CropTop': crop_top,
-                    'crs:CropRight': crop_right,
-                    'crs:CropBottom': crop_bottom,
-                    'crs:CropAngle': straighten,
-                    'crs:HasCrop': True,
-                    'crs:CropConstrainToUnitSquare': 1
-                }
-                
-                # Add aspect ratio constraint if available
-                if crop_json.get('aspectRatioType') == 3:  # Custom aspect ratio
-                    aspect_width = crop_json.get('aspectWidth')
-                    aspect_height = crop_json.get('aspectHeight')
-                    if aspect_width and aspect_height:
-                        crs_crop['crs:CropConstrainToWarp'] = False
+                # Special rotation-only case
+                transformer = CropRect([[x1, y1], [original_width, original_height]])
+            else:
+                transformer = CropRect(crop_rect)
             
-            return crs_crop
-            
+            return transformer.crop_factors(straighten, original_width, original_height)            
         except Exception as e:
             print(f"Error converting crop data: {e}")
             return {}
