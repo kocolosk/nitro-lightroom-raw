@@ -136,11 +136,11 @@ class NitroToCRSConverter:
 
             if x1 == 0 and y1 == 0 and w == 0 and h == 0:
                 # Special rotation-only case
-                transformer = CropRect([[x1, y1], [original_width, original_height]])
+                transformer = CropRect([[x1, y1], [original_width, original_height]], straighten, original_width, original_height)
             else:
-                transformer = CropRect(crop_rect)
+                transformer = CropRect(crop_rect, straighten, original_width, original_height)
             
-            return transformer.crop_factors(straighten, original_width, original_height)            
+            return transformer.crop_factors()            
         except Exception as e:
             print(f"Error converting crop data: {e}")
             return {}
