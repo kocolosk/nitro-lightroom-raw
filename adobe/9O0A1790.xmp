@@ -14,7 +14,7 @@
     xmlns:xmpDM="http://ns.adobe.com/xmp/1.0/DynamicMedia/"
     xmlns:crs="http://ns.adobe.com/camera-raw-settings/1.0/"
    xmp:CreatorTool="Nitro"
-   xmp:MetadataDate="2025-09-19T19:46:50-04:00"
+   xmp:MetadataDate="2025-09-30T23:22:33-04:00"
    xmp:Rating="1"
    xmp:CreateDate="2025-06-29T14:16:48.64-04:00"
    xmp:ModifyDate="2025-06-29T14:16:48.64-04:00"
@@ -73,7 +73,7 @@
    photoshop:SidecarForExtension="CR3"
    photoshop:EmbeddedXMPDigest="120B7B9CF9D08EF4F483A77E5B485EA7"
    dc:format="image/x-canon-cr3"
-   xmpMM:InstanceID="xmp.iid:5902d6e1-f8ea-48b1-a40a-2bee7db03eeb"
+   xmpMM:InstanceID="xmp.iid:b02bc07d-f393-4bcb-8ab4-d81ae1d2cc32"
    xmpMM:DocumentID="xmp.did:49498773-b9b6-42bf-8c69-e06d6b0a4c3e"
    xmpMM:OriginalDocumentID="xmp.did:49498773-b9b6-42bf-8c69-e06d6b0a4c3e"
    crd:CameraProfile="Camera Standard"
@@ -187,10 +187,10 @@
    crs:LensProfileDistortionScale="100"
    crs:LensProfileVignettingScale="100"
    crs:HasSettings="True"
-   crs:CropTop="0.041379"
-   crs:CropLeft="0.000431"
-   crs:CropBottom="0.974138"
-   crs:CropRight="0.933190"
+   crs:CropTop="0.000431"
+   crs:CropLeft="0.025862"
+   crs:CropBottom="0.933190"
+   crs:CropRight="0.958621"
    crs:CropAngle="0"
    crs:CropConstrainToWarp="0"
    crs:CropConstrainToUnitSquare="1"
@@ -223,8 +223,8 @@
       stEvt:changed="/metadata"/>
      <rdf:li
       stEvt:action="saved"
-      stEvt:instanceID="xmp.iid:5902d6e1-f8ea-48b1-a40a-2bee7db03eeb"
-      stEvt:when="2025-09-19T19:46:50-04:00"
+      stEvt:instanceID="xmp.iid:b02bc07d-f393-4bcb-8ab4-d81ae1d2cc32"
+      stEvt:when="2025-09-30T23:22:33-04:00"
       stEvt:softwareAgent="Adobe Lightroom 8.5.1 (Macintosh)"
       stEvt:changed="/metadata"/>
     </rdf:Seq>

@@ -11,10 +11,9 @@
     xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/"
     xmlns:stEvt="http://ns.adobe.com/xap/1.0/sType/ResourceEvent#"
     xmlns:crd="http://ns.adobe.com/camera-raw-defaults/1.0/"
-    xmlns:xmpDM="http://ns.adobe.com/xmp/1.0/DynamicMedia/"
     xmlns:crs="http://ns.adobe.com/camera-raw-settings/1.0/"
    xmp:CreatorTool="Nitro"
-   xmp:MetadataDate="2025-09-19T19:44:55-04:00"
+   xmp:MetadataDate="2025-09-30T23:23:18-04:00"
    xmp:CreateDate="2025-06-29T13:46:05.08-04:00"
    xmp:ModifyDate="2025-06-29T13:46:05.08-04:00"
    nitro:EditModel="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#xA;&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;&#xA;&lt;plist version=&quot;1.0&quot;&gt;&#xA;&lt;dict&gt;&#xA;&#x9;&lt;key&gt;compression&lt;/key&gt;&#xA;&#x9;&lt;integer&gt;0&lt;/integer&gt;&#xA;&#x9;&lt;key&gt;editModel&lt;/key&gt;&#xA;&#x9;&lt;string&gt;{&quot;defaultOrientation&quot;:1,&quot;editingJPEGHalf&quot;:false,&quot;versions&quot;:[{&quot;masks&quot;:[],&quot;adjDataArr&quot;:[{&quot;id&quot;:&quot;Crop&quot;,&quot;json&quot;:&quot;{\&quot;disclosed\&quot;:true,\&quot;cropRect\&quot;:[[0,0],[0,0]],\&quot;enabled\&quot;:true,\&quot;aspectRatioType\&quot;:0,\&quot;orientationIsRelative\&quot;:false,\&quot;numeric\&quot;:{\&quot;straighten\&quot;:-2.388278}}&quot;}]}],&quot;currentVersionIndex&quot;:0,&quot;lowResMask&quot;:false,&quot;formatVersion&quot;:1}&lt;/string&gt;&#xA;&#x9;&lt;key&gt;editedImagePixelSize&lt;/key&gt;&#xA;&#x9;&lt;string&gt;{6556, 4371}&lt;/string&gt;&#xA;&#x9;&lt;key&gt;format&lt;/key&gt;&#xA;&#x9;&lt;string&gt;com.gentlemencoders.nitro&lt;/string&gt;&#xA;&#x9;&lt;key&gt;originalImagePixelSize&lt;/key&gt;&#xA;&#x9;&lt;string&gt;{6960, 4640}&lt;/string&gt;&#xA;&#x9;&lt;key&gt;version&lt;/key&gt;&#xA;&#x9;&lt;integer&gt;1&lt;/integer&gt;&#xA;&lt;/dict&gt;&#xA;&lt;/plist&gt;&#xA;"
@@ -72,12 +71,11 @@
    photoshop:SidecarForExtension="CR3"
    photoshop:EmbeddedXMPDigest="120B7B9CF9D08EF4F483A77E5B485EA7"
    dc:format="image/x-canon-cr3"
-   xmpMM:InstanceID="xmp.iid:5774d0ed-01df-479a-a772-878e5414ff08"
+   xmpMM:InstanceID="xmp.iid:1c17df19-5dc8-4e70-9928-3fcddd3a1083"
    xmpMM:DocumentID="xmp.did:a8d41cc3-f80e-425d-a017-7aeb655002e6"
    xmpMM:OriginalDocumentID="xmp.did:a8d41cc3-f80e-425d-a017-7aeb655002e6"
    crd:CameraProfile="Camera Standard"
    crd:LookName=""
-   xmpDM:good="True"
    crs:Version="17.5"
    crs:ProcessVersion="15.4"
    crs:WhiteBalance="As Shot"
@@ -217,8 +215,8 @@
       stEvt:changed="/metadata"/>
      <rdf:li
       stEvt:action="saved"
-      stEvt:instanceID="xmp.iid:5774d0ed-01df-479a-a772-878e5414ff08"
-      stEvt:when="2025-09-19T19:44:55-04:00"
+      stEvt:instanceID="xmp.iid:1c17df19-5dc8-4e70-9928-3fcddd3a1083"
+      stEvt:when="2025-09-30T23:23:18-04:00"
       stEvt:softwareAgent="Adobe Lightroom 8.5.1 (Macintosh)"
       stEvt:changed="/metadata"/>
     </rdf:Seq>

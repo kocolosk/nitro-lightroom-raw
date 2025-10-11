@@ -6,15 +6,14 @@
             xmlns:dc="http://purl.org/dc/elements/1.1/"
             xmlns:nitro="http://com.gentlemencoders/xmp/nitro/1.0/">
          <xmp:CreatorTool>Nitro</xmp:CreatorTool>
-         <xmp:MetadataDate>2025-09-19T10:53:25-04:00</xmp:MetadataDate>
+         <xmp:MetadataDate>2025-06-30T18:18:38-04:00</xmp:MetadataDate>
          <dc:subject>
             <rdf:Bag>
                <rdf:li>sloane_kocoloski</rdf:li>
             </rdf:Bag>
          </dc:subject>
-         <nitro:EditModel>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&#xA;&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;&#xA;&lt;plist version="1.0"&gt;&#xA;&lt;dict&gt;&#xA;&#x9;&lt;key&gt;compression&lt;/key&gt;&#xA;&#x9;&lt;integer&gt;0&lt;/integer&gt;&#xA;&#x9;&lt;key&gt;editModel&lt;/key&gt;&#xA;&#x9;&lt;string&gt;{"formatVersion":1,"defaultOrientation":1,"versions":[{"adjDataArr":[{"id":"Crop","json":"{\"cropRect\":[[1286,404.16666666666697],[5071,3380.666666666666]],\"numeric\":{\"straighten\":0},\"orientationIsRelative\":false,\"enabled\":true,\"disclosed\":true,\"aspectRatioType\":0}"}],"masks":[]}],"currentVersionIndex":0,"lowResMask":false,"editingJPEGHalf":false}&lt;/string&gt;&#xA;&#x9;&lt;key&gt;editedImagePixelSize&lt;/key&gt;&#xA;&#x9;&lt;string&gt;{5071, 3381}&lt;/string&gt;&#xA;&#x9;&lt;key&gt;format&lt;/key&gt;&#xA;&#x9;&lt;string&gt;com.gentlemencoders.nitro&lt;/string&gt;&#xA;&#x9;&lt;key&gt;originalImagePixelSize&lt;/key&gt;&#xA;&#x9;&lt;string&gt;{6960, 4640}&lt;/string&gt;&#xA;&#x9;&lt;key&gt;version&lt;/key&gt;&#xA;&#x9;&lt;integer&gt;1&lt;/integer&gt;&#xA;&lt;/dict&gt;&#xA;&lt;/plist&gt;&#xA;</nitro:EditModel>
+         <nitro:EditModel>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&#xA;&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;&#xA;&lt;plist version="1.0"&gt;&#xA;&lt;dict&gt;&#xA;&#x9;&lt;key&gt;compression&lt;/key&gt;&#xA;&#x9;&lt;integer&gt;0&lt;/integer&gt;&#xA;&#x9;&lt;key&gt;editModel&lt;/key&gt;&#xA;&#x9;&lt;string&gt;{"lowResMask":false,"defaultOrientation":1,"versions":[{"adjDataArr":[{"json":"{\"aspectRatioType\":0,\"numeric\":{\"straighten\":0},\"cropRect\":[[1286,406],[5065,3376.666666666666]],\"orientationIsRelative\":false,\"enabled\":false,\"disclosed\":true}","id":"Crop"}],"masks":[]}],"currentVersionIndex":0,"editingJPEGHalf":false,"formatVersion":1}&lt;/string&gt;&#xA;&#x9;&lt;key&gt;format&lt;/key&gt;&#xA;&#x9;&lt;string&gt;com.gentlemencoders.nitro&lt;/string&gt;&#xA;&#x9;&lt;key&gt;originalImagePixelSize&lt;/key&gt;&#xA;&#x9;&lt;string&gt;{6960, 4640}&lt;/string&gt;&#xA;&#x9;&lt;key&gt;version&lt;/key&gt;&#xA;&#x9;&lt;integer&gt;1&lt;/integer&gt;&#xA;&lt;/dict&gt;&#xA;&lt;/plist&gt;&#xA;</nitro:EditModel>
          <nitro:OriginalPixelSize>{6960, 4640}</nitro:OriginalPixelSize>
-         <nitro:EditedPixelSize>{5071, 3381}</nitro:EditedPixelSize>
       </rdf:Description>
    </rdf:RDF>
 </x:xmpmeta>

@@ -11,10 +11,9 @@
     xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/"
     xmlns:stEvt="http://ns.adobe.com/xap/1.0/sType/ResourceEvent#"
     xmlns:crd="http://ns.adobe.com/camera-raw-defaults/1.0/"
-    xmlns:xmpDM="http://ns.adobe.com/xmp/1.0/DynamicMedia/"
     xmlns:crs="http://ns.adobe.com/camera-raw-settings/1.0/"
    xmp:CreatorTool="Nitro"
-   xmp:MetadataDate="2025-09-19T19:46:11-04:00"
+   xmp:MetadataDate="2025-09-30T23:23:18-04:00"
    xmp:Rating="1"
    xmp:CreateDate="2025-06-29T14:08:14.70-04:00"
    xmp:ModifyDate="2025-06-29T14:08:14.70-04:00"
@@ -73,12 +72,11 @@
    photoshop:SidecarForExtension="CR3"
    photoshop:EmbeddedXMPDigest="120B7B9CF9D08EF4F483A77E5B485EA7"
    dc:format="image/x-canon-cr3"
-   xmpMM:InstanceID="xmp.iid:1eff257d-480c-4e37-b69a-f97f8ede2d50"
+   xmpMM:InstanceID="xmp.iid:e5c68697-284a-4d55-ba62-773b7e7858ec"
    xmpMM:DocumentID="xmp.did:cfcd5e62-15b7-4b4c-af06-523f50b8d993"
    xmpMM:OriginalDocumentID="xmp.did:cfcd5e62-15b7-4b4c-af06-523f50b8d993"
    crd:CameraProfile="Camera Standard"
    crd:LookName=""
-   xmpDM:good="True"
    crs:Version="17.5"
    crs:ProcessVersion="15.4"
    crs:WhiteBalance="As Shot"
@@ -218,8 +216,8 @@
       stEvt:changed="/metadata"/>
      <rdf:li
       stEvt:action="saved"
-      stEvt:instanceID="xmp.iid:1eff257d-480c-4e37-b69a-f97f8ede2d50"
-      stEvt:when="2025-09-19T19:46:11-04:00"
+      stEvt:instanceID="xmp.iid:e5c68697-284a-4d55-ba62-773b7e7858ec"
+      stEvt:when="2025-09-30T23:23:18-04:00"
       stEvt:softwareAgent="Adobe Lightroom 8.5.1 (Macintosh)"
       stEvt:changed="/metadata"/>
     </rdf:Seq>

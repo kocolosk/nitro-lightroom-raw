@@ -1,0 +1,5 @@
+__pycache__/
+.venv/
+
+nitro/*.CR3
+adobe/*.CR3

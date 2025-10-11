@@ -3,7 +3,6 @@
   <rdf:Description rdf:about=""
     xmlns:xmp="http://ns.adobe.com/xap/1.0/"
     xmlns:nitro="http://com.gentlemencoders/xmp/nitro/1.0/"
-    xmlns:crs="http://ns.adobe.com/camera-raw-settings/1.0/"
     xmlns:tiff="http://ns.adobe.com/tiff/1.0/"
     xmlns:exif="http://ns.adobe.com/exif/1.0/"
     xmlns:aux="http://ns.adobe.com/exif/1.0/aux/"
@@ -11,13 +10,72 @@
     xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/"
     xmlns:stEvt="http://ns.adobe.com/xap/1.0/sType/ResourceEvent#"
+    xmlns:crd="http://ns.adobe.com/camera-raw-defaults/1.0/"
+    xmlns:crs="http://ns.adobe.com/camera-raw-settings/1.0/"
    xmp:CreatorTool="Nitro"
-   xmp:MetadataDate="2025-09-18T23:07:44-04:00"
+   xmp:MetadataDate="2025-09-30T23:24:26-04:00"
    xmp:CreateDate="2025-06-29T11:03:55.26-04:00"
    xmp:ModifyDate="2025-06-29T11:03:55.26-04:00"
+   xmp:Rating="1"
    nitro:EditModel="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#xA;&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;&#xA;&lt;plist version=&quot;1.0&quot;&gt;&#xA;&lt;dict&gt;&#xA;&#x9;&lt;key&gt;compression&lt;/key&gt;&#xA;&#x9;&lt;integer&gt;0&lt;/integer&gt;&#xA;&#x9;&lt;key&gt;editModel&lt;/key&gt;&#xA;&#x9;&lt;string&gt;{&quot;lowResMask&quot;:false,&quot;defaultOrientation&quot;:1,&quot;editingJPEGHalf&quot;:false,&quot;versions&quot;:[{&quot;adjDataArr&quot;:[{&quot;json&quot;:&quot;{\&quot;cropRect\&quot;:[[0,247],[6271,4180.666666666667]],\&quot;enabled\&quot;:true,\&quot;orientationIsRelative\&quot;:false,\&quot;numeric\&quot;:{\&quot;straighten\&quot;:0},\&quot;disclosed\&quot;:true,\&quot;aspectRatioType\&quot;:0}&quot;,&quot;id&quot;:&quot;Crop&quot;}],&quot;masks&quot;:[]}],&quot;formatVersion&quot;:1,&quot;currentVersionIndex&quot;:0}&lt;/string&gt;&#xA;&#x9;&lt;key&gt;editedImagePixelSize&lt;/key&gt;&#xA;&#x9;&lt;string&gt;{6271, 4181}&lt;/string&gt;&#xA;&#x9;&lt;key&gt;format&lt;/key&gt;&#xA;&#x9;&lt;string&gt;com.gentlemencoders.nitro&lt;/string&gt;&#xA;&#x9;&lt;key&gt;originalImagePixelSize&lt;/key&gt;&#xA;&#x9;&lt;string&gt;{6960, 4640}&lt;/string&gt;&#xA;&#x9;&lt;key&gt;version&lt;/key&gt;&#xA;&#x9;&lt;integer&gt;1&lt;/integer&gt;&#xA;&lt;/dict&gt;&#xA;&lt;/plist&gt;&#xA;"
    nitro:EditedPixelSize="{6271, 4181}"
    nitro:OriginalPixelSize="{6960, 4640}"
+   tiff:Orientation="1"
+   tiff:Make="Canon"
+   tiff:Model="Canon EOS R7"
+   tiff:ImageWidth="6960"
+   tiff:ImageLength="4640"
+   exif:ApertureValue="4643856/1000000"
+   exif:ExposureBiasValue="0/1"
+   exif:FNumber="5/1"
+   exif:ExposureTime="1/1250"
+   exif:MaxApertureValue="45/10"
+   exif:ShutterSpeedValue="10287712/1000000"
+   exif:DateTimeOriginal="2025-06-29T11:03:55.26-04:00"
+   exif:ExposureProgram="0"
+   exif:FocalLength="167/1"
+   exif:MeteringMode="6"
+   exif:GPSLatitude="42,30.8643N"
+   exif:GPSLongitude="71,41.6112W"
+   exif:GPSAltitude="553/5"
+   exif:GPSVersionID="2.2.0.0"
+   exif:ExifVersion="0231"
+   exif:SensitivityType="2"
+   exif:RecommendedExposureIndex="400"
+   exif:CustomRendered="0"
+   exif:ExposureMode="0"
+   exif:WhiteBalance="0"
+   exif:SceneCaptureType="0"
+   exif:FocalPlaneXResolution="102732108/32768"
+   exif:FocalPlaneYResolution="102732108/32768"
+   exif:FocalPlaneResolutionUnit="3"
+   exif:GPSAltitudeRef=""
+   exif:GPSMapDatum=""
+   exif:GPSDestBearingRef=""
+   exif:GPSProcessingMethod=""
+   exif:PixelXDimension="6960"
+   exif:PixelYDimension="4640"
+   aux:ApproximateFocusDistance="4294967295/1"
+   aux:Lens="RF100-500mm F4.5-7.1 L IS USM"
+   aux:SerialNumber="182034003480"
+   aux:LensInfo="100/1 500/1 0/0 0/0"
+   aux:LensID="61182"
+   aux:LensSerialNumber="3934001204"
+   aux:ImageNumber="0"
+   aux:FlashCompensation="0/1"
+   aux:Firmware="1.3.1"
+   photoshop:DateCreated="2025-06-29T11:03:55.26-04:00"
+   photoshop:Country="United States"
+   photoshop:State="Massachusetts"
+   photoshop:City="Lancaster"
+   photoshop:SidecarForExtension="CR3"
+   photoshop:EmbeddedXMPDigest="204EFD9F554999D23D8725CA00C3050A"
+   dc:format="image/x-canon-cr3"
+   xmpMM:InstanceID="xmp.iid:2952fbfa-1493-4a42-a4a3-6f685600448c"
+   xmpMM:DocumentID="xmp.did:bfa1c4c9-255b-42ee-aa5b-3d3ae8cadd30"
+   xmpMM:OriginalDocumentID="xmp.did:bfa1c4c9-255b-42ee-aa5b-3d3ae8cadd30"
+   crd:CameraProfile="Camera Standard"
+   crd:LookName=""
    crs:Version="17.5"
    crs:ProcessVersion="15.4"
    crs:WhiteBalance="As Shot"
@@ -127,7 +185,7 @@
    crs:LensProfileVignettingScale="100"
    crs:HasSettings="True"
    crs:CropTop="0.045761"
-   crs:CropLeft="0.000000"
+   crs:CropLeft="0"
    crs:CropBottom="0.946767"
    crs:CropRight="0.901006"
    crs:CropAngle="0"
@@ -135,57 +193,34 @@
    crs:CropConstrainToUnitSquare="1"
    crs:HasCrop="True"
    crs:AlreadyApplied="False"
-   crs:RawFileName="9O0A0735.CR3"
-   tiff:Orientation="1"
-   tiff:Make="Canon"
-   tiff:Model="Canon EOS R7"
-   exif:ApertureValue="4643856/1000000"
-   exif:ExposureBiasValue="0/1"
-   exif:FNumber="5/1"
-   exif:ExposureTime="1/1250"
-   exif:MaxApertureValue="45/10"
-   exif:ShutterSpeedValue="10287712/1000000"
-   exif:DateTimeOriginal="2025-06-29T11:03:55.26-04:00"
-   exif:ExposureProgram="0"
-   exif:FocalLength="167/1"
-   exif:MeteringMode="6"
-   exif:GPSLatitude="42,30.8643N"
-   exif:GPSLongitude="71,41.6112W"
-   exif:GPSAltitude="553/5"
-   exif:GPSVersionID="2.2.0.0"
-   exif:ExifVersion="0231"
-   exif:SensitivityType="2"
-   exif:RecommendedExposureIndex="400"
-   exif:CustomRendered="0"
-   exif:ExposureMode="0"
-   exif:WhiteBalance="0"
-   exif:SceneCaptureType="0"
-   exif:FocalPlaneXResolution="102732108/32768"
-   exif:FocalPlaneYResolution="102732108/32768"
-   exif:FocalPlaneResolutionUnit="3"
-   exif:GPSAltitudeRef=""
-   exif:GPSMapDatum=""
-   exif:GPSDestBearingRef=""
-   exif:GPSProcessingMethod=""
-   aux:ApproximateFocusDistance="4294967295/1"
-   aux:Lens="RF100-500mm F4.5-7.1 L IS USM"
-   aux:SerialNumber="182034003480"
-   aux:LensInfo="100/1 500/1 0/0 0/0"
-   aux:LensID="61182"
-   aux:LensSerialNumber="3934001204"
-   aux:ImageNumber="0"
-   aux:FlashCompensation="0/1"
-   aux:Firmware="1.3.1"
-   photoshop:DateCreated="2025-06-29T11:03:55.26-04:00"
-   photoshop:Country="United States"
-   photoshop:State="Massachusetts"
-   photoshop:City="Lancaster"
-   photoshop:SidecarForExtension="CR3"
-   photoshop:EmbeddedXMPDigest="204EFD9F554999D23D8725CA00C3050A"
-   dc:format="image/x-canon-cr3"
-   xmpMM:InstanceID="xmp.iid:bfa1c4c9-255b-42ee-aa5b-3d3ae8cadd30"
-   xmpMM:DocumentID="xmp.did:bfa1c4c9-255b-42ee-aa5b-3d3ae8cadd30"
-   xmpMM:OriginalDocumentID="xmp.did:bfa1c4c9-255b-42ee-aa5b-3d3ae8cadd30">
+   crs:RawFileName="9O0A0735.CR3">
+   <exif:ISOSpeedRatings>
+    <rdf:Seq>
+     <rdf:li>400</rdf:li>
+    </rdf:Seq>
+   </exif:ISOSpeedRatings>
+   <exif:Flash
+    exif:Fired="False"
+    exif:Return="0"
+    exif:Mode="0"
+    exif:Function="False"
+    exif:RedEyeMode="False"/>
+   <xmpMM:History>
+    <rdf:Seq>
+     <rdf:li
+      stEvt:action="saved"
+      stEvt:instanceID="xmp.iid:bfa1c4c9-255b-42ee-aa5b-3d3ae8cadd30"
+      stEvt:when="2025-09-18T23:07:44-04:00"
+      stEvt:softwareAgent="Adobe Lightroom 8.5.1 (Macintosh)"
+      stEvt:changed="/metadata"/>
+     <rdf:li
+      stEvt:action="saved"
+      stEvt:instanceID="xmp.iid:2952fbfa-1493-4a42-a4a3-6f685600448c"
+      stEvt:when="2025-09-30T23:24:26-04:00"
+      stEvt:softwareAgent="Adobe Lightroom 8.5.1 (Macintosh)"
+      stEvt:changed="/metadata"/>
+    </rdf:Seq>
+   </xmpMM:History>
    <crs:ToneCurvePV2012>
     <rdf:Seq>
      <rdf:li>0, 0</rdf:li>
@@ -215,27 +250,6 @@
      <rdf:li>-1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000</rdf:li>
     </rdf:Seq>
    </crs:PointColors>
-   <exif:ISOSpeedRatings>
-    <rdf:Seq>
-     <rdf:li>400</rdf:li>
-    </rdf:Seq>
-   </exif:ISOSpeedRatings>
-   <exif:Flash
-    exif:Fired="False"
-    exif:Return="0"
-    exif:Mode="0"
-    exif:Function="False"
-    exif:RedEyeMode="False"/>
-   <xmpMM:History>
-    <rdf:Seq>
-     <rdf:li
-      stEvt:action="saved"
-      stEvt:instanceID="xmp.iid:bfa1c4c9-255b-42ee-aa5b-3d3ae8cadd30"
-      stEvt:when="2025-09-18T23:07:44-04:00"
-      stEvt:softwareAgent="Adobe Lightroom 8.5.1 (Macintosh)"
-      stEvt:changed="/metadata"/>
-    </rdf:Seq>
-   </xmpMM:History>
   </rdf:Description>
  </rdf:RDF>
 </x:xmpmeta>
