@@ -1,0 +1,7 @@
+[project]
+name = "nitro-lightroom-raw"
+version = "0.1.0"
+description = "Translates a portion of XMP metadata from Nitro to Adobe Lightroom format"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = []
